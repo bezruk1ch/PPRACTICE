@@ -1,0 +1,297 @@
+/* Основные стили секции */
+.reviews-section {
+    background-color: #212A33;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 30px 0;
+}
+
+/* Заголовки */
+.reviews-main-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.reviews-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Сетка отзывов */
+.reviews-grid {
+    max-width: 1160px;
+    margin: 0 auto 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+/* Карточка отзыва */
+.review-card {
+    background-color: rgba(44, 62, 80, 0.75);
+    border-radius: 15px;
+    padding: 30px 40px;
+}
+
+.review-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.review-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 30px;
+}
+
+.review-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-name {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: white;
+    margin: 0;
+    display: flex;
+}
+
+.first-name {
+    padding-right: 6px;
+}
+
+.review-rating-date {
+    margin-top: 10px;
+}
+
+.rating-stars {
+    display: flex;
+}
+
+.star {
+    font-size: 24px;
+    color: #D0D0D0;
+    margin-right: 5px;
+}
+
+.star.filled {
+    color: #F1C40F;
+}
+
+.review-date {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #D0D0D0;
+    margin: 10px 0 0;
+}
+
+/* Контент отзыва */
+.review-content {
+    margin-top: 30px;
+}
+
+.review-text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: white;
+    max-width: 485px;
+    margin: 0;
+}
+
+.review-text.short {
+    max-height: 145px;
+    overflow: hidden;
+}
+
+.read-more-btn {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: #A4A4A4;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Стили для карточки компании */
+.company-card {
+    border: 2px solid #E74C3C;
+    /* Особое выделение карточки компании */
+}
+
+.company-message {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* Стили для кнопки в карточке компании */
+.leave-review-btn {
+    display: inline-block;
+    background-color: #E74C3C;
+    color: #212A33;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    text-align: center;
+    padding: 15px 30px;
+    border-radius: 15px;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.leave-review-btn:hover {
+    background-color: #C0392B;
+}
+
+.company-rating {
+    display: flex;
+    align-items: center;
+    color: #F1C40F;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    margin: 10px 0 0;
+}
+
+.rating-value {
+    margin-left: 8px;
+    color: #E74C3C;
+    font-weight: bold;
+}
+
+.company-date {
+    color: #ffffff;
+    font-style: italic;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.review-btn-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Кнопка "Смотреть все отзывы" */
+.all-reviews-btn-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.all-reviews-btn {
+    background-color: #E74C3C;
+    color: #212A33;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    border: none;
+    border-radius: 15px;
+    width: 304px;
+    height: 70px;
+    cursor: pointer;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #2C3E50;
+    border-radius: 15px;
+    max-width: 800px;
+    width: calc(100% - 60px);
+    padding: 40px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.modal-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 30px;
+}
+
+.modal-user-info {
+    flex: 1;
+}
+
+#modalUserName {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: white;
+    margin: 0;
+}
+
+.modal-rating {
+    display: flex;
+    margin-top: 10px;
+}
+
+.modal-date {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #D0D0D0;
+    margin: 10px 0 0;
+}
+
+.modal-text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: white;
+    margin: 0;
+}

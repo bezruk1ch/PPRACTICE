@@ -1,0 +1,143 @@
+/* Контейнер для слайдера и кнопок */
+.slider-container {
+    max-width: 1280px;
+    margin: 30px auto 0;
+    position: relative;
+    /* Для позиционирования кнопок */
+}
+
+/* Слайдер */
+.slider {
+    height: 340px;
+    background-color: #212A33;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Слайд */
+.slide {
+    display: none;
+    /* По умолчанию скрываем все слайды */
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+/* Активный слайд */
+.slide.active {
+    display: flex;
+    /* Показываем только активный слайд */
+}
+
+/* Левая часть слайда (текст и кнопка) */
+.slide-content {
+    padding-left: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-top: 30px;
+}
+
+/* Контейнер для заголовка и описания */
+.slide-text {
+    flex-grow: 1;
+    /* Занимает всё доступное пространство */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Центрируем текст по вертикали */
+}
+
+/* Заголовок слайда */
+.slide-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+    /* Улучшаем читаемость */
+}
+
+/* Описание слайда */
+.slide-description {
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin: 20px 0;
+    line-height: 1.5;
+    /* Улучшаем читаемость */
+}
+
+/* Кнопка слайда */
+.slide-button {
+    width: 216px;
+    height: 53px;
+    /* Новая высота кнопки */
+    background-color: #E74C3C;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 30px;
+    color: #212A33;
+}
+
+/* Правая часть слайда (изображение) */
+.slide-image {
+    width: 567px;
+    /* Ширина изображения */
+    height: 340px;
+    /* Высота изображения */
+    overflow: hidden;
+    /* Обрезаем изображение, если оно больше */
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Сохраняем пропорции изображения */
+}
+
+/* Кнопки "Назад" и "Вперед" */
+.slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.slider-button.prev {
+    left: -50px;
+    /* Кнопка "Назад" слева от слайдера */
+}
+
+.slider-button.next {
+    right: -50px;
+    /* Кнопка "Вперед" справа от слайдера */
+}
+
+.slider-button:hover {
+    background-color: #c0392b;
+    /* Изменение цвета при наведении */
+}

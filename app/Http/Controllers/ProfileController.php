@@ -6,55 +6,79 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Order;
+use App\Models\User;
+use App\Models\Review;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function show()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = auth()->user();
+
+        $currentOrders = [];
+        $pastOrders = [];
+
+        // Получаем все отзывы пользователя
+        $reviews = Review::where('user_id', $user->id)->get();
+
+        return view('layouts.pages.profile', compact('user', 'currentOrders', 'pastOrders'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $user = auth()->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'birth_date' => 'nullable|date',
+            'phone' => 'nullable|string|max:20|unique:users,phone,' . $user->id,
+            'login' => 'required|string|max:255|unique:users,login,' . $user->id,
+            'password' => 'nullable|string|confirmed|min:6',
+            'profile_picture' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('profile_picture')) {
+            // Удалить старую, если есть
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $path = $request->file('profile_picture')->store('avatars', 'public');
+            $user->avatar = $path;
         }
 
-        $request->user()->save();
+        $user->fill($validated);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        if (!empty($validated['password'])) {
+            $user->password = bcrypt($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('profile')->with('success', 'Профиль успешно обновлён.');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function storeReview(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:500',
         ]);
 
-        $user = $request->user();
+        // Сохраняем отзыв в базу данных
+        Review::create([
+            'user_id' => Auth::id(), // Используем текущего авторизованного пользователя
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('profile')->with('success', 'Ваш отзыв успешно оставлен!');
     }
 }

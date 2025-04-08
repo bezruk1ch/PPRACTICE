@@ -1,0 +1,73 @@
+/* Основной контейнер */
+.subscribe-container {
+    position: relative;
+    display: inline-block;
+    padding: 15px; /* Отступ для стрелок */
+}
+
+/* Стили кнопки */
+.subscribe-button {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    color: #E74C3C;
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px 36px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.subscribe-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Общие стили для угловых стрелок */
+.corner-arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #E74C3C;
+    z-index: 2;
+}
+
+/* Позиционирование стрелок */
+.top-left {
+    top: 0;
+    left: 0;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
+}
+
+.top-right {
+    top: 0;
+    right: 0;
+    clip-path: polygon(100% 0%, 0% 0%, 100% 100%);
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    clip-path: polygon(0% 100%, 0% 0%, 100% 100%);
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    clip-path: polygon(100% 100%, 0% 100%, 100% 0%);
+}
+
+/* Анимация при наведении */
+.subscribe-container:hover .corner-arrow {
+    animation: arrow-pulse 0.5s ease infinite alternate;
+}
+
+@keyframes arrow-pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.3); }
+}

@@ -1,0 +1,281 @@
+.header {
+    background-color: #2C3E50;
+    padding-top: 10px;
+}
+
+/* Логотип */
+.logo {
+    display: flex;
+    flex-direction: column;
+    margin-right: 30px;
+    flex-shrink: 0;
+    /* Чтобы логотип не сжимался */
+}
+
+.logo-img {
+    width: 160px;
+    height: 155px;
+}
+
+.logo-text {
+    color: #E74C3C;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 36px;
+    text-align: center;
+}
+
+/* Бургерное меню */
+.burger-menu {
+    display: none;
+    /* Скрыто на десктопах */
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.burger-icon {
+    width: 32px;
+    height: 32px;
+}
+
+/* Правая часть шапки */
+.header-right {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Верхняя часть шапки */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+
+/* Кнопка звонка */
+.call-button {
+    background-color: #E74C3C;
+    color: white;
+    border-radius: 15px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+}
+
+.call-button:hover {
+    background-color: #c0392b;
+}
+
+
+
+.call-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.mail {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.call-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Соцсети */
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.social-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.social-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+}
+
+/* Кнопка пользователя */
+.user-button {
+    background-color: #E74C3C;
+    color: white;
+    border-radius: 15px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.user-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.user-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Нижняя часть шапки */
+.header-bottom {
+    background-color: #2C3E50;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: space-between; /* Основное изменение */
+    align-items: center;
+    width: 100%;
+    max-width: 1280px; /* Ограничиваем ширину как в container */
+}
+
+.menu-buttons {
+    display: flex;
+    justify-content: space-between; /* Основное изменение */
+    align-items: center;
+    flex-grow: 1; /* Занимает доступное пространство */
+}
+
+.menu-button {
+    background-color: #212A33;
+    color: #E74C3C;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 16px;
+    height: 64px;
+    transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #E74C3C;
+    color: white;
+}
+
+/* Кнопка корзины (исходный стиль) */
+.cart-button {
+    background-color: #E74C3C;
+    color: white;
+    border-radius: 15px;
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    height: 64px;
+}
+
+.cart-icon {
+    width: 39px;
+    height: 39px;
+}
+
+.cart-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.cart-counter {
+    background-color: white;
+    color: #E74C3C;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .menu-buttons {
+        gap: 15px;
+    }
+    
+    .menu-button, .cart-button {
+        padding: 6px 12px;
+        height: 54px;
+    }
+    
+    .cart-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .cart-text {
+        font-size: 16px;
+    }
+    
+    .cart-counter {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .menu-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .menu-button {
+        font-size: 14px;
+        padding: 4px 10px;
+        height: 44px;
+    }
+    
+    .cart-button {
+        margin-top: 5px;
+        height: 44px;
+    }
+    
+    .cart-text {
+        font-size: 14px;
+    }
+}

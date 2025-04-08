@@ -1,0 +1,200 @@
+.contacts-section {
+    width: 1280px;
+    margin: 0 auto;
+    border-radius: 15px;
+    background-color: #f8f8f8;
+    padding-bottom: 30px;
+    background-color: #212A33;
+    margin-top: 30px
+}
+
+.contacts-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 48px;
+    text-align: center;
+    padding-top: 30px;
+    margin: 0;
+    color: white
+}
+
+.contacts-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    padding-top: 30px;
+    margin: 0;
+    color: white
+}
+
+.contacts-container {
+    width: 1160px;
+    margin: 30px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contacts-info {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: white
+}
+
+.contact-item {
+    margin-top: 33px;
+}
+
+.contacts-map {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Выравнивание содержимого по вертикали */
+    height: 100%;
+    /* Необходимо для работы justify-content */
+}
+
+.map-caption {
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    margin-top: 5px;
+    color: white;
+    max-width: 600px;
+    text-align: center;
+}
+
+
+
+.contacts-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.contact-button {
+    padding: 12px 24px;
+    border-radius: 15px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.feedback-button {
+    background-color: #E74C3C;
+    color: white;
+}
+
+.reviews-button {
+    background-color: white;
+    color: #E74C3C;
+    border: 2px solid #E74C3C;
+}
+
+.contact-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для модального окна */
+.feedback-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.feedback-modal.active {
+    display: flex;
+}
+
+.feedback-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feedback-content {
+    animation: fadeIn 0.3s ease-out;
+}
