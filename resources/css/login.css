@@ -1,0 +1,92 @@
+/* Стили для страницы авторизации и регистрации */
+
+/* Общие стили */
+body {
+    background-color: #121212; /* темный фон */
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+}
+
+form {
+    background-color: #1c1c1c;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    color: #aaa;
+    font-weight: 500;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+    border-color: #00c1ff;
+    outline: none;
+}
+
+button {
+    background-color: #00c1ff;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #009bb0;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+a {
+    color: #00c1ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.block {
+    display: block;
+}
+
+/* Стили для иконки видимости пароля */
+button svg {
+    fill: #fff;
+    transition: fill 0.3s ease;
+}
+
+button:hover svg {
+    fill: #00c1ff;
+}

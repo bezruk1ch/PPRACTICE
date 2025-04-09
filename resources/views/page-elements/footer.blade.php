@@ -46,25 +46,7 @@
                 </div>
             </div>
 
-            <!-- Нижняя часть шапки -->
-            <div class="header-bottom">
-                <nav class="header-nav">
-                    <!-- Кнопки меню -->
-                    <div class="menu-buttons">
-                        <button class="menu-button">Конструктор заказов</button>
-                        <button class="menu-button">Портфолио</button>
-                        <button class="menu-button">О нас</button>
-                        <button class="menu-button">Контакты</button>
-                        <button class="menu-button">Личный кабинет</button>
-                        <!-- Кнопка корзины -->
-                        <button class="cart-button">
-                            <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
-                            <span class="cart-text">Корзина</span>
-                            <div class="cart-counter">0</div>
-                        </button>
-                    </div>
-                </nav>
-            </div>
+
         </div>
     </div>
 
@@ -77,5 +59,20 @@
             <button class="mobile-menu-button">Контакты</button>
             <button class="mobile-menu-button">Личный кабинет</button>
         </nav>
+    </div>
+
+    <!-- Модальное окно для подписки -->
+    <div id="subscribe-modal" class="feedback-modal">
+        <div class="feedback-content">
+            <span class="close-modal" id="close-button">&times;</span>
+            <h2>Подписка на новости</h2>
+            <form id="subscribe-form" class="feedback-form">
+                <div class="form-group">
+                    <label for="email">Ваш email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <button type="submit" class="submit-btn">Подписаться</button>
+            </form>
+        </div>
     </div>
 </header>

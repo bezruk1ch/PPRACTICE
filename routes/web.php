@@ -7,8 +7,13 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+use App\Models\Template;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,15 +29,15 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 // Главная страница
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/constructor', [ConstructorController::class, 'index'])->name('constructor.index');
+
 // Конструктор
-Route::prefix('constructor')->group(function () {
-    Route::get('/design', [ConstructorController::class, 'index'])->name('constructor.index');
-    Route::get('/template/{type}/{id}', [ConstructorController::class, 'selectTemplate'])->name('constructor.select');
-    Route::post('/save', [ConstructorController::class, 'saveDesign'])->name('constructor.save');
-    Route::get('/preview/{id}', [ConstructorController::class, 'previewDesign'])->name('constructor.preview');
-    Route::post('/print/{id}', [ConstructorController::class, 'sendToPrint'])->name('constructor.print');
-    Route::get('/templates/{type}', [ConstructorController::class, 'getTemplatesByType'])->name('constructor.templates');
+Route::middleware(['auth'])->group(function () {
+    // Создание заказа
+    Route::get('constructor/create/{template_id}', [OrderController::class, 'create'])->name('constructor.create');
+    Route::post('constructor/save', [OrderController::class, 'store'])->name('constructor.save');
 });
+
 
 // Портфолио
 Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
@@ -59,10 +64,13 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/profile/review', [ProfileController::class, 'storeReview'])->name('profile.review');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/register');
+})->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
+// Отзывы
+
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 require __DIR__ . '/auth.php';

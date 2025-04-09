@@ -18,7 +18,7 @@
             <!-- Верхняя часть шапки -->
             <div class="header-top">
                 <!-- Кнопка звонка -->
-                <button class="call-button">
+                <button class="call-button" id="call-button">
                     <img src="{{ asset('img/header/tel.png') }}" alt="Телефон" class="call-icon">
                     <span class="call-text">+7 (351) 777-36-55</span>
                 </button>
@@ -51,11 +51,11 @@
                 <nav class="header-nav">
                     <!-- Кнопки меню -->
                     <div class="menu-buttons">
-                        <a href="{{ route('constructor.index') }}"><button class="menu-button">Конструктор заказов</button></a>
+                        <button class="menu-button">Конструктор заказов</button>
                         <a href="{{ route('portfolio') }}"><button class="menu-button">Портфолио</button></a>
                         <a href="{{ route('about') }}"><button class="menu-button">О нас</button></a>
                         <a href="{{ route('contacts') }}"><button class="menu-button">Контакты</button></a>
-                        <button class="menu-button">Личный кабинет</button>
+                        <a href="{{ route('profile') }}"><button class="menu-button">Личный кабинет</button></a>
                         <!-- Кнопка корзины -->
                         <button class="cart-button">
                             <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">

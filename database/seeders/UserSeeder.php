@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'birth_date' => '1990-01-01',
             'phone' => '79001234567',
+            'profile_picture' => 'img/users/ivanivanovich.jpg',
         ]);
 
         // Создание администратора

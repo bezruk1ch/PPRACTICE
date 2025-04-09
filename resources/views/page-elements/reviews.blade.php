@@ -63,7 +63,7 @@
                             Нам доверяют более 1000 клиентов!
                         </p>
                     </div>
-                    <a href="/leave-review" class="leave-review-btn">
+                    <a href="{{ route('profile') . '#leave-review-section' }}" class="leave-review-btn">
                         Оставить отзыв
                     </a>
                     @else

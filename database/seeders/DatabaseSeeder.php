@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             // AdminSeeder::class,
             ReviewSeeder::class,
             DesignTemplatesSeeder::class,
+            TemplateSeeder::class,
         ]); 
     }
 }

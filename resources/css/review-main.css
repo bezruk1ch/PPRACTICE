@@ -295,3 +295,27 @@
     color: white;
     margin: 0;
 }
+
+/* Стили для кнопок переключения страниц */
+.reviews-navigation {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.prev-btn, .next-btn {
+    background-color: #E74C3C;
+    color: #212A33;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    padding: 15px 30px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0 10px;
+}
+
+.prev-btn:hover, .next-btn:hover {
+    background-color: #C0392B;
+}

@@ -1,296 +1,105 @@
-.constructor-page {
-    font-family: 'Montserrat', 'Lato', sans-serif;
-    background-color: #2C3E50;
-    color: white;
+/* Основной стиль для страницы */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding: 0;
+    color: #333;
 }
 
-.constructor-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 30px auto;
+/* Обертка для контента */
+.container {
+    width: 80%;
+    margin: 20px auto;
     padding: 20px;
-}
-
-.editor-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-@media (min-width: 768px) {
-    .editor-wrapper {
-        flex-direction: row;
-    }
-}
-
-.editor-canvas-container {
-    flex: 2;
-    border: 2px solid #34495e;
-    border-radius: 8px;
-    overflow: hidden;
-    background: white;
-    min-height: 500px;
-}
-
-#design-editor {
-    width: 100%;
-    height: 100%;
-}
-
-.editor-tools-panel {
-    flex: 1;
-    background: #34495e;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.tools-title {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-}
-
-.tool-group {
-    margin-bottom: 20px;
-}
-
-.tool-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.tool-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    background: #2c3e50;
-    border: 1px solid #40556b;
-    border-radius: 4px;
-    color: white;
-}
-
-.tool-button {
-    padding: 8px 16px;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.tool-button:hover {
-    background: #2980b9;
-}
-
-.save-button {
-    width: 100%;
-    padding: 12px;
-    background: #2ecc71;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.save-button:hover {
-    background: #27ae60;
-}
-
-.constructor-title {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2rem;
-}
-
-.template-types {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.type-button {
-    padding: 10px 20px;
-    background: #34495e;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.type-button:hover {
-    background: #40556b;
-}
-
-.type-button.active {
-    background: #3498db;
-}
-
-.templates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 25px;
-}
-
-.template-card {
-    background: #34495e;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s;
-}
-
-.template-card:hover {
-    transform: translateY(-5px);
-}
-
-.template-image-container {
-    height: 200px;
-    overflow: hidden;
-}
-
-.template-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.template-title {
-    padding: 15px;
-    margin: 0;
-    font-size: 1.2rem;
-    text-align: center;
-}
-
-.select-button {
-    display: block;
-    padding: 10px;
-    margin: 15px;
-    background: #2ecc71;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background 0.3s;
-}
-
-.select-button:hover {
-    background: #27ae60;
-}
-
-
-/* Стили для страницы предпросмотра */
-.preview-page {
-    font-family: 'Montserrat', 'Lato', sans-serif;
-    background-color: #2C3E50;
-    color: white;
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.preview-container {
-    flex: 1;
-    padding: 30px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.preview-content {
-    width: 90%;
-    max-width: 1000px;
-    background: #34495e;
-    padding: 30px;
+    background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.preview-title {
+/* Заголовки */
+h1 {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 2rem;
-    color: #ecf0f1;
+    color: #4CAF50;
 }
 
-.design-preview {
-    margin: 0 auto 30px;
-    max-width: 800px;
-    border: 2px solid #4a6278;
-    border-radius: 5px;
-    overflow: hidden;
-    background: white;
-}
-
-.preview-image {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.preview-actions {
+/* Список шаблонов */
+ul {
     display: flex;
-    justify-content: center;
-    gap: 20px;
     flex-wrap: wrap;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
 }
 
-.action-button {
-    padding: 12px 25px;
+ul li {
+    margin: 20px;
+    text-align: center;
+    width: 200px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+ul li:hover {
+    transform: scale(1.05);
+}
+
+ul li img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Формы */
+form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+form input[type="text"],
+form textarea,
+form input[type="number"],
+form input[type="file"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+form textarea {
+    height: 100px;
+}
+
+/* Кнопка */
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
+    transition: background-color 0.3s ease;
 }
 
-.back-button {
-    background: #7f8c8d;
+button:hover {
+    background-color: #45a049;
+}
+
+/* Появление ошибки или успешного сообщения */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
     color: white;
+    background-color: #f44336;
 }
 
-.back-button:hover {
-    background: #95a5a6;
-}
-
-.print-button {
-    background: #3498db;
-    color: white;
-}
-
-.print-button:hover {
-    background: #2980b9;
-}
-
-.print-form {
-    margin: 0;
-}
-
-@media (max-width: 600px) {
-    .preview-content {
-        padding: 20px;
-    }
-    
-    .preview-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .action-button {
-        width: 100%;
-        text-align: center;
-    }
+.alert.success {
+    background-color: #4CAF50;
 }

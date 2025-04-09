@@ -75,7 +75,7 @@
         </div>
         <div class="contacts-buttons">
             <button class="contact-button feedback-button" id="feedbackButton">Форма обратной связи</button>
-            <button class="contact-button reviews-button">Отзывы</button>
+            <a href="{{ route('reviews') }}"><button class="contact-button reviews-button">Отзывы</button></a>
         </div>
 
     </section>

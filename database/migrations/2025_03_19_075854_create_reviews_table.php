@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); // Оставляем nullable
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null'); // Если user_id отсутствует, оставляем его пустым
+            $table->string('user_name');
+            $table->string('user_surname');
             $table->tinyInteger('rating')->unsigned(); // 1-5
             $table->text('comment');
             $table->timestamps();
             $table->string('user_avatar')->nullable(); // Дополнительный столбец для аватара
             $table->boolean('is_company')->default(false); // Флаг для компаний, если нужно
+            $table->boolean('is_for_main_page')->default(false);
         });
     }
 

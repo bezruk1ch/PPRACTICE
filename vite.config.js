@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/css/constructor-page.css',
                 'resources/css/about-us.css',
                 'resources/css/profile.css',
+                'resources/css/login.css',
             ],
             refresh: true,
         }),

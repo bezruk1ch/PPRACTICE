@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('title');
+            $table->unsignedBigInteger('template_id')->nullable();
+            $table->foreign('template_id')->references('id')->on('templates')->onDelete('set null');
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->enum('status', ['new', 'in_progress', 'completed', 'canceled'])->default('new');
+            $table->text('text')->nullable();
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }

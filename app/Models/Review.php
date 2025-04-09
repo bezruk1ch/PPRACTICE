@@ -10,7 +10,7 @@ class Review extends Model
     use HasFactory;
 
     // Заполняемые поля
-    protected $fillable = ['user_id', 'rating', 'comment', 'user_avatar', 'is_company'];
+    protected $fillable = ['user_id', 'user_name', 'user_surname', 'rating', 'comment', 'user_avatar', 'is_company', 'is_for_main_page'];
 
     // Связь с пользователем
     public function user()

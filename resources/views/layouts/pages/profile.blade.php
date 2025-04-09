@@ -5,27 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/header.css'])
     @vite(['resources/css/profile.css'])
     @vite(['resources/css/footer.css'])
 </head>
 
-<body class="bg-[#ecf0f1] font-montserrat">
+<body class="m-0 bg-[#2C3E50] font-montserrat">
     @include('page-elements.header')
 
     <section class="profile-section">
-        <h2 class="section-title">Личный кабинет</h2>
+        <div class="container-profile">
+            <h2 class="profile-title">Личный кабинет</h2>
 
-        <!-- Информация о пользователе -->
-        <div class="profile-info">
-            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="profile-form">
                 @csrf
-                @method('PUT')
+                @method('POST')
 
                 <div class="avatar-block">
-                    <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="Аватар" class="profile-avatar">
-                    <input type="file" name="profile_picture">
+                    <img src="{{ asset($user->profile_picture) }}" alt="Аватар" class="profile-avatar" id="avatarPreview">
+
+                    <label for="profile_picture" class="avatar-overlay">Выбрать</label>
+                    <input type="file" id="profile_picture" name="profile_picture" class="avatar-input" accept="image/*">
                 </div>
 
                 <div class="input-group">
@@ -45,6 +51,19 @@
                     <input type="date" name="birth_date" value="{{ auth()->user()->birth_date }}">
                 </div>
                 <div class="input-group">
+                    <label>Пол</label>
+                    <select name="gender">
+                        <option value="male" {{ auth()->user()->gender === 'male' ? 'selected' : '' }}>Мужской</option>
+                        <option value="female" {{ auth()->user()->gender === 'female' ? 'selected' : '' }}>Женский</option>
+                        <option value="other" {{ auth()->user()->gender === 'other' ? 'selected' : '' }}>Другое</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ auth()->user()->email }}">
+                </div>
+                <div class="input-group">
                     <label>Телефон</label>
                     <input type="text" name="phone" value="{{ auth()->user()->phone }}">
                 </div>
@@ -59,63 +78,61 @@
 
                 <button type="submit" class="save-btn">Сохранить изменения</button>
             </form>
+
+            <div class="orders-section">
+                <h3>Текущие заказы</h3>
+                <ul>
+                    @forelse($currentOrders as $order)
+                    <li>{{ $order->title }} - {{ $order->status }}</li>
+                    @empty
+                    <li>Нет активных заказов.</li>
+                    @endforelse
+                </ul>
+            </div>
+
+            <div class="orders-section">
+                <h3>История заказов</h3>
+                <ul>
+                    @forelse($pastOrders as $order)
+                    <li>{{ $order->title }} - {{ $order->status }}</li>
+                    @empty
+                    <li>История заказов пуста.</li>
+                    @endforelse
+                </ul>
+            </div>
+
+            <div class="review-form" id="leave-review-section">
+                <h3>Оставить отзыв</h3>
+                <form action="{{ route('profile.review') }}" method="POST">
+                    @csrf
+                    <div class="input-group">
+                        <label>Оценка</label>
+                        <select name="rating">
+                            <option value="5">5 - Отлично</option>
+                            <option value="4">4 - Хорошо</option>
+                            <option value="3">3 - Нормально</option>
+                            <option value="2">2 - Плохо</option>
+                            <option value="1">1 - Ужасно</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Комментарий</label>
+                        <textarea name="comment" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="save-btn">Отправить</button>
+                </form>
+            </div>
         </div>
 
-        <!-- Текущие заказы -->
-        <div class="orders-section">
-            <h3>Текущие заказы</h3>
-            <ul>
-                @forelse($currentOrders as $order)
-                <li>{{ $order->title }} - {{ $order->status }}</li>
-                @empty
-                <li>Нет активных заказов.</li>
-                @endforelse
-            </ul>
-        </div>
-
-        <!-- История заказов -->
-        <div class="orders-section">
-            <h3>История заказов</h3>
-            <ul>
-                @forelse($pastOrders as $order)
-                <li>{{ $order->title }} - {{ $order->status }}</li>
-                @empty
-                <li>История заказов пуста.</li>
-                @endforelse
-            </ul>
-        </div>
-
-        <!-- Оставить отзыв -->
-        <div class="review-form">
-            <h3>Оставить отзыв</h3>
-            <form action="{{ route('profile.review') }}" method="POST">
+        <div class="logout-container">
+            <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <div class="input-group">
-                    <label>Оценка</label>
-                    <select name="rating">
-                        <option value="5">5 - Отлично</option>
-                        <option value="4">4 - Хорошо</option>
-                        <option value="3">3 - Нормально</option>
-                        <option value="2">2 - Плохо</option>
-                        <option value="1">1 - Ужасно</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Комментарий</label>
-                    <textarea name="comment" rows="4"></textarea>
-                </div>
-                <button type="submit" class="save-btn">Отправить</button>
+                <button type="submit" class="logout-btn">Выйти из аккаунта</button>
             </form>
         </div>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn btn-danger">Выход</button>
-        </form>
     </section>
 
     @include('page-elements.footer')
 </body>
-
 
 </html>

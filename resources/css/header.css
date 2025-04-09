@@ -68,15 +68,16 @@
     padding: 0 15px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+/* Эффект при наведении */
 .call-button:hover {
     background-color: #c0392b;
+    transform: translateY(-4px); /* Легкое поднимание кнопки */
 }
 
-
-
+/* Иконка звонка */
 .call-icon {
     width: 24px;
     height: 24px;
@@ -98,23 +99,45 @@
 }
 
 /* Соцсети */
+/* Соцсети */
 .social-icons {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
+/* Стили кнопок соцсетей */
 .social-button {
     background: none;
     border: none;
     cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
+/* Стили иконок соцсетей */
 .social-icon {
     width: 39px;
     height: 39px;
     border-radius: 50%;
+    transition: transform 0.3s ease;
 }
+
+/* Эффект увеличения при наведении */
+.social-button:hover .social-icon {
+    transform: scale(1.1);
+}
+
+/* Плавное увеличение кнопки при наведении */
+.social-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Добавление цвета при наведении (опционально) */
+.social-button:hover {
+    color: #E74C3C;
+}
+
 
 /* Кнопка пользователя */
 .user-button {
@@ -127,14 +150,23 @@
     padding: 0 16px;
     cursor: pointer;
     white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+/* Эффект при наведении */
+.user-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-4px); /* Легкое поднимание кнопки */
+}
+
+/* Иконка пользователя */
 .user-icon {
     width: 24px;
     height: 24px;
     margin-right: 8px;
 }
 
+/* Текст на кнопке пользователя */
 .user-text {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
@@ -150,17 +182,21 @@
 
 .header-nav {
     display: flex;
-    justify-content: space-between; /* Основное изменение */
+    justify-content: space-between;
+    /* Основное изменение */
     align-items: center;
     width: 100%;
-    max-width: 1280px; /* Ограничиваем ширину как в container */
+    max-width: 1280px;
+    /* Ограничиваем ширину как в container */
 }
 
 .menu-buttons {
     display: flex;
-    justify-content: space-between; /* Основное изменение */
+    justify-content: space-between;
+    /* Основное изменение */
     align-items: center;
-    flex-grow: 1; /* Занимает доступное пространство */
+    flex-grow: 1;
+    /* Занимает доступное пространство */
 }
 
 .menu-button {
@@ -230,21 +266,22 @@
     .menu-buttons {
         gap: 15px;
     }
-    
-    .menu-button, .cart-button {
+
+    .menu-button,
+    .cart-button {
         padding: 6px 12px;
         height: 54px;
     }
-    
+
     .cart-icon {
         width: 32px;
         height: 32px;
     }
-    
+
     .cart-text {
         font-size: 16px;
     }
-    
+
     .cart-counter {
         width: 25px;
         height: 25px;
@@ -257,24 +294,24 @@
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .menu-buttons {
         flex-wrap: wrap;
         justify-content: center;
         gap: 8px;
     }
-    
+
     .menu-button {
         font-size: 14px;
         padding: 4px 10px;
         height: 44px;
     }
-    
+
     .cart-button {
         margin-top: 5px;
         height: 44px;
     }
-    
+
     .cart-text {
         font-size: 14px;
     }
