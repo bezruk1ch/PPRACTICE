@@ -20,7 +20,7 @@
 
         <!-- Кнопка "Смотреть все работы" -->
         <div class="portfolio-button-container">
-            <button class="portfolio-button">Смотреть все работы</button>
+        <a href="{{ route('portfolio') }}"><button class="portfolio-button">Смотреть все работы</button></a>
         </div>
     </div>
 </section>

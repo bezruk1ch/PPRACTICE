@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_designs', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('template_id')->constrained('design_templates');
-            $table->json('content');
-            $table->string('preview_image');
-            $table->string('status')->default('draft');
+            $table->string('name'); // Название категории (например, визитки, футболки)
+            $table->string('image')->nullable(); // Для изображения
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_designs');
+        Schema::dropIfExists('categories');
     }
 };

@@ -44,6 +44,11 @@
                 @endforeach
             </div>
 
+            <!-- Кнопки для прокрутки -->
+            <div class="reviews-navigation">
+                <button class="prev-btn" onclick="scrollReviews(-1)">Назад</button>
+                <button class="next-btn" onclick="scrollReviews(1)">Вперед</button>
+            </div>
         </div>
     </section>
 

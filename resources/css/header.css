@@ -74,7 +74,8 @@
 /* Эффект при наведении */
 .call-button:hover {
     background-color: #c0392b;
-    transform: translateY(-4px); /* Легкое поднимание кнопки */
+    transform: translateY(-4px);
+    /* Легкое поднимание кнопки */
 }
 
 /* Иконка звонка */
@@ -156,7 +157,8 @@
 /* Эффект при наведении */
 .user-button:hover {
     background-color: #c0392b;
-    transform: translateY(-4px); /* Легкое поднимание кнопки */
+    transform: translateY(-4px);
+    /* Легкое поднимание кнопки */
 }
 
 /* Иконка пользователя */
@@ -200,23 +202,23 @@
 }
 
 .menu-button {
-    background-color: #212A33;
+    background: none;
     color: #E74C3C;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     border: none;
-    border-radius: 15px;
+    border-radius: 0;
     padding: 8px 16px;
     cursor: pointer;
     white-space: nowrap;
     font-size: 16px;
     height: 64px;
-    transition: background-color 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .menu-button:hover {
-    background-color: #E74C3C;
     color: white;
+    background: none;
 }
 
 /* Кнопка корзины (исходный стиль) */

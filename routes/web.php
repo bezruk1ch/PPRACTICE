@@ -29,15 +29,14 @@ use App\Models\Template;
 // Главная страница
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/constructor', [ConstructorController::class, 'index'])->name('constructor.index');
-
 // Конструктор
-Route::middleware(['auth'])->group(function () {
-    // Создание заказа
-    Route::get('constructor/create/{template_id}', [OrderController::class, 'create'])->name('constructor.create');
-    Route::post('constructor/save', [OrderController::class, 'store'])->name('constructor.save');
-});
-
+Route::get('/constructor', [ConstructorController::class, 'index'])->name('constructor.index');
+Route::get('/constructor/{category_id}', [ConstructorController::class, 'templates'])->name('constructor.templates');
+Route::get('/constructor/templates/{category}', [ConstructorController::class, 'showTemplates'])->name('constructor.templates');
+Route::get('/constructor/edit/{template}', [ConstructorController::class, 'edit'])->name('constructor.edit');
+Route::put('/constructor/update/{template}', [ConstructorController::class, 'update'])->name('constructor.update');
+Route::get('constructor/templates/{template}/edit', [ConstructorController::class, 'edit'])->name('constructor.edit');
+Route::post('constructor/templates/{template}', [ConstructorController::class, 'save'])->name('constructor.save');
 
 // Портфолио
 Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');

@@ -5,24 +5,28 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Template;
+use Illuminate\Support\Facades\DB;
 
 class TemplateSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Template::create([
-            'name' => 'Классическая визитка',
-            'preview_image' => 'img/constructor/business_card_template.jpg',
-            'description' => 'Простой и строгий стиль',
-        ]);
-    
-        Template::create([
-            'name' => 'Современный буклет',
-            'preview_image' => 'img/constructorbooklet_template.jpg',
-            'description' => 'Яркий и креативный дизайн',
+        DB::table('templates')->insert([
+            [
+                'category_id' => 1, // Визитки
+                'name' => 'Шаблон 1',
+                'image' => 'business_card_image.png',
+                'font' => 'Arial',
+                'background_color' => '#FFFFFF',
+            ],
+            [
+                'category_id' => 1, // Визитки
+                'name' => 'Шаблон 2',
+                'image' => 'business_card_image.png',
+                'font' => 'Verdana',
+                'background_color' => '#F1F1F1',
+            ],
+            // Добавь другие шаблоны по необходимости
         ]);
     }
 }

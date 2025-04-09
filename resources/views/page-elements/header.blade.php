@@ -33,16 +33,18 @@
                 </div>
 
                 <!-- Кнопка пользователя -->
-                <a href="{{ route('register') }}"><button class="user-button" id="user-button">
+                <a href="{{ route(Auth::check() ? 'profile' : 'register') }}">
+                    <button class="user-button" id="user-button">
                         <img src="{{ asset('img/header/user.png') }}" alt="Пользователь" class="user-icon">
                         <span class="user-text" id="user-text">
                             @auth
-                            {{ $user->name }} {{ $user->surname }}
+                            {{ Auth::user()->name }} {{ Auth::user()->surname }}
                             @else
                             Вход/регистрация
                             @endauth
                         </span>
-                    </button></a>
+                    </button>
+                </a>
 
             </div>
 
@@ -51,11 +53,11 @@
                 <nav class="header-nav">
                     <!-- Кнопки меню -->
                     <div class="menu-buttons">
-                        <button class="menu-button">Конструктор заказов</button>
+                    <a href="{{ route('constructor.index') }}"><button class="menu-button">Конструктор заказов</button></a>
                         <a href="{{ route('portfolio') }}"><button class="menu-button">Портфолио</button></a>
                         <a href="{{ route('about') }}"><button class="menu-button">О нас</button></a>
                         <a href="{{ route('contacts') }}"><button class="menu-button">Контакты</button></a>
-                        <a href="{{ route('profile') }}"><button class="menu-button">Личный кабинет</button></a>
+                        <a href="{{ route('reviews') }}"><button class="menu-button">Отзывы</button></a>
                         <!-- Кнопка корзины -->
                         <button class="cart-button">
                             <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
