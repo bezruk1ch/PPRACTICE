@@ -4,168 +4,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конструктор</title>
+    <title>Конструктор визиток</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @vite(['resources/css/header.css'])
-    @vite(['resources/css/constructor-page.css'])
-    @vite(['resources/css/footer.css'])
+    @vite(['resources/css/constructor.css'])
+    @vite(['resources/js/constructor.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&family=Oswald:wght@200;400;600&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="m-0 bg-[#2C3E50]">
-    @include('page-elements.header')
+<body>
 
-    <div class="constructor-section">
-        <h1 class="constructor-title">Выберите категорию товара</h1>
-
-        <div class="categories-container">
-            @foreach($categories as $category)
-                <div class="category-card">
-                    <a href="{{ route('constructor.templates', $category->id) }}">
-                        <div class="category-image">
-                            <img src="{{ asset('img/categories/' . $category->image) }}" alt="{{ $category->name }}">
-                        </div>
-                        <h2 class="category-name">{{ $category->name }}</h2>
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Модальное окно для добавления элемента конструктора -->
-        <div id="interactiveModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Добавить элемент</h2>
-                <select id="interactiveType">
-                    <option value="card">Карточка</option>
-                    <option value="test1">Тест 1</option>
-                    <option value="test2">Тест 2</option>
-                    <option value="test3">Тест 3</option>
-                </select>
-
-                <!-- Поля для добавления карточки -->
-                <div id="cardFields" style="display: none;">
-                    <input type="text" id="cardImage" placeholder="URL изображения">
-                    <input type="text" id="cardLabel" placeholder="Текст на карточке">
-                    <input type="text" id="cardButton" placeholder="Текст кнопки">
-                </div>
-
-                <!-- Поля для добавления теста -->
-                <div id="test1Fields" style="display: none;">
-                    <input type="text" id="test1Question" placeholder="Вопрос">
-                    <input type="text" id="test1ButtonText" placeholder="Текст кнопки">
-                </div>
-
-                <div id="test2Fields" style="display: none;">
-                    <input type="text" id="test2Question" placeholder="Вопрос">
-                    <input type="number" id="test2OptionsCount" placeholder="Количество вариантов">
-                </div>
-
-                <div id="test3Fields" style="display: none;">
-                    <input type="text" id="test3Question" placeholder="Вопрос">
-                    <input type="number" id="test3ImagesCount" placeholder="Количество изображений">
-                </div>
-
-                <button onclick="addInteractiveElement()">Добавить элемент</button>
+    <!-- 1) Фиксированная верхняя глобальная -->
+    <header class="top-bar">
+        <div class="top-bar__left">
+            <div class="logo">
+                <a href="{{ route('home') }}"><img src="{{ asset('img/header/logo.png') }}" alt="Логотип" class="logo-img"></a>
+                <div class="logo-text">А ПЛЮС</div>
             </div>
+            <nav class="site-nav">
+                <a href="#">Главная</a>
+                <a href="#">Вход</a>
+                <a href="#">Регистрация</a>
+            </nav>
         </div>
+        <div class="top-bar__right">
+            <button class="download-btn">Скачать макет</button>
+        </div>
+    </header>
 
-        <!-- Кнопка для открытия модального окна -->
-        <button onclick="openModal()">Открыть конструктор</button>
+    <div class="editor-bar-toolbox">
+
+        <!-- 3) Левая панель -->
+        <aside id="toolbox">
+            <button class="tool-item" data-tool="text">Текст</button>
+            <button class="tool-item" data-tool="background">Фон</button>
+            <button class="tool-item" data-tool="images">Картинки</button>
+            <button class="tool-item" data-tool="elements">Элементы</button>
+            <button class="tool-item" data-tool="base">Основа</button>
+        </aside>
+
+        <!-- 4) Вторая выезжающая панель (справа от main-toolbox) -->
+        <aside id="slide-toolbox">
+            <button id="closeSlide" class="slide-close">×</button>
+
+            <div id="text-options" class="toolbox-section" style="display: none;">
+                <p><strong>Кликните по тексту, чтобы добавить его в рабочую область:</strong></p>
+                <a href="#" onclick="addText('heading')">Заголовок</a><br>
+                <a href="#" onclick="addText('subheading')">Подзаголовок</a><br>
+                <a href="#" onclick="addText('paragraph')">Обычный текст</a>
+            </div>
+
+            <!-- Фон -->
+            <div id="background-options" class="toolbox-section" style="display: none;">
+                <h3 class="section-title">Фон</h3>
+                <div class="section-group">
+                    <button class="tool-btn">Заливка цветом</button>
+                    <input type="color" class="color-picker" value="#ffffff">
+                    <button class="tool-btn">Загрузить с компьютера</button>
+                    <input type="file" accept="image/*" class="upload-input">
+                </div>
+            </div>
+
+            <!-- Картинки -->
+            <div id="images-options" class="toolbox-section" style="display: none;">
+                <h3 class="section-title">Картинки</h3>
+                <div class="section-group">
+                    <button class="tool-btn">Загрузить с компьютера</button>
+                    <input type="file" accept="image/*" class="upload-input">
+
+                    <button id="addByUrlBtn" class="tool-btn">Добавить по ссылке</button>
+                    <input type="text" id="urlInput" placeholder="https://..." class="text-input">
+                </div>
+            </div>
+
+            <!-- Элементы -->
+            <div id="elements-options" class="toolbox-section" style="display: none;">
+                <h3 class="section-title">Элементы</h3>
+                <div class="section-group">
+                    <button class="tool-btn">Фигуры и линии</button>
+                    <button class="tool-btn">Коллекция иконок</button>
+                </div>
+            </div>
+
+            <!-- Основа -->
+            <div id="base-options" class="toolbox-section" style="display: none;">
+                <h3 class="section-title">Основа</h3>
+                <div class="section-group">
+                    <button class="tool-btn">Визитка</button>
+                    <button class="tool-btn">Футболка</button>
+                    <button class="tool-btn">Постер</button>
+                    <button class="tool-btn">Буклет</button>
+                    <!-- можно добавить другие -->
+                </div>
+            </div>
+        </aside>
+
+
+        <div class="editor-bar-canvas">
+
+            <!-- 2) Вторая верхняя панель (редактор-бар) -->
+            <section class="editor-bar">
+                <!-- содержимое будет заменяться по клику на объекты -->
+                <div id="editor-controls" class="editor-bar__inner"></div>
+            </section>
+
+            <!-- 5) Основная рабочая зона с холстом -->
+            <section class="canvas-wrapper" id="canvas-wrapper">
+                <div class="canvas-area">
+                    <!-- Кнопки над холстом -->
+                    <div class="canvas-controls-top">
+                        <button id="copySideBtn" class="side-btn">Скопировать сторону</button>
+                        <button id="clearSideBtn" class="side-btn">Очистить сторону</button>
+                    </div>
+
+                    <!-- Сам холст -->
+                    <div id="canvas">
+                        <div class="safety-lines">
+                            <div class="safety-line top"></div>
+                            <div class="safety-line right"></div>
+                            <div class="safety-line bottom"></div>
+                            <div class="safety-line left"></div>
+                        </div>
+                        <!-- сюда добавляются draggable элементы -->
+                    </div>
+
+                    <!-- Кнопки под холстом -->
+                    <div class="canvas-controls-bottom">
+                        <div class="side-switch">
+                            <button id="frontSideBtn" class="side-btn active">Лицевая сторона</button>
+                            <button id="backSideBtn" class="side-btn">Оборотная сторона</button>
+                        </div>
+                        <button id="proceedBtn" class="action-btn">Продолжить</button>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
-    @include('page-elements.footer')
 
-    @section('scripts')
-        <script>
-            // Вставляем все JavaScript функции, которые ты прислал, сюда.
+    <!-- Скрытые шаблоны для динамического наполнения .editor-bar -->
+    <!-- шаблон базовых действий -->
+    <template id="tpl-actions-default">
+        <div class="editor-actions">
+            <button id="undoBtn" class="action-btn">← Отменить</button>
+            <button id="redoBtn" class="action-btn">Вернуть →</button>
+            <button id="saveBtn" class="action-btn" onclick="saveDesign()">Сохранить макет</button>
+            <button id="clearBtn" class="action-btn" onclick="clearCanvas()">Очистить</button>
+        </div>
+    </template>
 
-            // Открытие и закрытие модального окна
-            function openModal() {
-                document.getElementById('interactiveModal').style.display = 'block';
-            }
+    <!-- шаблон лишь для текстовых контролов -->
+    <template id="tpl-actions-text">
+        <div class="text-edit-panel">
+            <!-- Выбор шрифта -->
+            <select id="fontSelect" title="Шрифт" onchange="onFontChange()">
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Oswald">Oswald</option>
+                <option value="Roboto">Roboto</option>
+            </select>
 
-            document.querySelector('.close').onclick = function() {
-                document.getElementById('interactiveModal').style.display = 'none';
-            };
+            <!-- Размер шрифта -->
+            <input id="fontSizeInput" title="Размер шрифта" type="number" min="8" max="120" onchange="onFontSizeChange()">
 
-            // Обновление полей в зависимости от выбранного типа
-            function updateCardFields() {
-                const type = document.getElementById('interactiveType').value;
-                document.getElementById('cardFields').style.display = (type === 'card') ? 'block' : 'none';
-                document.getElementById('test1Fields').style.display = (type === 'test1') ? 'block' : 'none';
-                document.getElementById('test2Fields').style.display = (type === 'test2') ? 'block' : 'none';
-                document.getElementById('test3Fields').style.display = (type === 'test3') ? 'block' : 'none';
-            }
+            <!-- Цвет текста -->
+            <input id="fontColorInput" title="Цвет текста" type="color" onchange="onFontColorChange()">
 
-            document.getElementById('interactiveType').addEventListener('change', updateCardFields);
-            updateCardFields();
+            <!-- Жирный / Курсив / Подчёркнутый / Верхний регистр -->
+            <button title="Жирный" onclick="applyBold()">B</button>
+            <button title="Курсив" onclick="applyItalic()">I</button>
+            <button title="Подчёркнутый" onclick="applyUnderline()">U</button>
+            <button title="Регистр" onclick="applyUppercase()">Aa</button>
 
-            // Функция для добавления элемента в рабочее пространство
-            function addInteractiveElement() {
-                const type = document.getElementById('interactiveType').value;
-                const workspace = document.getElementById('workspace');
-                let newElement;
+            <!-- Выравнивание текста -->
+            <button id="alignBtn" onclick="toggleAlign()" title="Выравнивание">⬅️</button>
+            <!--<div>
+                <button onclick="alignText('left')">⯇</button>
+                <button onclick="alignText('center')">↔</button>
+                <button onclick="alignText('right')">⯈</button>
+            </div> -->
 
-                if (type === 'card') {
-                    const image = document.getElementById('cardImage').value;
-                    const label = document.getElementById('cardLabel').value;
-                    const buttonText = document.getElementById('cardButton').value;
+            <!-- Слои и выравнивание по холсту -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" title="Слои и выравнивание">📐</button>
+                <div class="dropdown-menu">
+                    <div><span>📤</span> <button onclick="bringForward()">На передний план</button></div>
+                    <div><span>📥</span> <button onclick="sendBackward()">На задний план</button></div>
+                    <hr>
+                    <div><span>🔼</span> <button onclick="alignToCanvas('safe-top')">По верхнему краю</button></div>
+                    <div><span>🔽</span> <button onclick="alignToCanvas('safe-bottom')">По нижнему краю</button></div>
+                    <div><span>↔️</span> <button onclick="alignToCanvas('center')">По центру (гор.)</button></div>
+                    <div><span>↕️</span> <button onclick="alignToCanvas('middle')">По центру (верт.)</button></div>
+                    <div><span>⬅️</span> <button onclick="alignToCanvas('safe-left')">По левому краю</button></div>
+                    <div><span>➡️</span> <button onclick="alignToCanvas('safe-right')">По правому краю</button></div>
+                </div>
+            </div>
 
-                    newElement = document.createElement('div');
-                    newElement.style.border = '1px solid #ddd';
-                    newElement.innerHTML = `
-                        <img src="${image}" alt="${label}" style="width: 100px; height: 100px;">
-                        <p>${label}</p>
-                        <button>${buttonText}</button>
-                    `;
-                } else if (type === 'test1') {
-                    const question = document.getElementById('test1Question').value;
-                    const buttonText = document.getElementById('test1ButtonText').value;
+            <!-- Фиксация -->
+            <button id="lockElement" title="Фиксировать" onclick="toggleLockElement()">🔒</button>
 
-                    newElement = document.createElement('div');
-                    newElement.innerHTML = `
-                        <p>${question}</p>
-                        <input type="text" placeholder="Введите ответ">
-                        <button>${buttonText}</button>
-                    `;
-                } else if (type === 'test2') {
-                    const question = document.getElementById('test2Question').value;
-                    const optionsCount = document.getElementById('test2OptionsCount').value;
+            <!-- Параметры -->
+            <div class="dropdown">
+                <button class="dropdown-toggle" title="Параметры">⚙️</button>
+                <div class="dropdown-menu">
+                    <label>Межбуквенный интервал
+                        <input id="letterSpacingInput" type="range" min="0" max="20" step="1" onchange="onLetterSpacingChange()">
+                    </label>
+                    <label>Межстрочный интервал
+                        <input id="lineHeightInput" type="range" min="1" max="3" step="0.1" onchange="onLineHeightChange()">
+                    </label>
+                    <label>Прозрачность
+                        <input id="opacityInput" type="range" min="0" max="1" step="0.01" value="1" onchange="onOpacityChange()">
+                    </label>
+                </div>
+            </div>
 
-                    newElement = document.createElement('div');
-                    newElement.innerHTML = `<p>${question}</p>`;
-                    for (let i = 1; i <= optionsCount; i++) {
-                        newElement.innerHTML += `
-                            <input type="radio" name="test2Answer" id="option${i}">
-                            <label for="option${i}">Option ${i}</label>
-                        `;
-                    }
-                } else if (type === 'test3') {
-                    const question = document.getElementById('test3Question').value;
-                    const imagesCount = document.getElementById('test3ImagesCount').value;
 
-                    newElement = document.createElement('div');
-                    newElement.innerHTML = `<p>${question}</p>`;
-                    for (let i = 1; i <= imagesCount; i++) {
-                        newElement.innerHTML += `
-                            <img src="image${i}.jpg" alt="Option ${i}" style="width: 100px; height: 100px;">
-                            <input type="radio" name="test3Answer" id="option${i}">
-                        `;
-                    }
-                }
+            <!-- Копировать и удалить -->
+            <button onclick="copyElement()" title="Копировать">📄</button>
+            <button onclick="deleteElement()" title="Удалить">🗑️</button>
+        </div>
+    </template>
 
-                newElement.style.position = 'absolute';
-                newElement.style.left = '100px';
-                newElement.style.top = '100px';
-                newElement.onclick = function() {
-                    if (confirm('Удалить элемент?')) {
-                        this.remove();
-                    }
-                };
-                workspace.appendChild(newElement);
-            }
-        </script>
-    @endsection
+    <template id="tpl-actions-image">
+        <div class="image-edit-panel" style="display:flex; gap:10px; padding:12px; background:#1e1e1e; border-radius:12px;">
+            <button onclick="bringForward()">⬆️ Вперёд</button>
+            <button onclick="sendBackward()">⬇️ Назад</button>
+            <label>Ширина:
+                <input id="imgWidthInput" type="number" min="10" onchange="onImageWidthChange()">
+            </label>
+            <label>Поворот:
+                <input id="imgRotateInput" type="number" min="0" max="360" onchange="onImageRotateChange()">
+            </label>
+            <button onclick="deleteElement()">🗑️ Удалить</button>
+        </div>
+    </template>
+
+    <!-- всплывающее окно проверки макета -->
+    <div id="preview-modal" class="preview-modal">
+        <div class="preview-content">
+            <h2 class="preview-title">Проверьте ваш макет</h2>
+            <ul class="preview-list">
+                <li>Информация размещена верно и без ошибок</li>
+                <li>Изображения чёткие и не размытые</li>
+                <li>Текст разборчив и не сливается с фоном</li>
+                <li>Элементы не накладываются друг на друга</li>
+            </ul>
+            <div class="preview-buttons">
+                <button class="btn preview-btn" data-action="front">Лицевая сторона</button>
+                <button class="btn preview-btn" data-action="back">Оборотная сторона</button>
+                <button class="btn preview-btn" data-action="order">Сделать заказ</button>
+                <button class="btn preview-btn" data-action="download">Скачать макет</button>
+                <button class="btn preview-btn" data-action="edit">Вернуться к редактированию</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="zoom-controls">
+        <button id="zoomOutBtn">−</button>
+        <span id="zoomValue">100%</span>
+        <button id="zoomInBtn">+</button>
+    </div>
+
+    <div id="downloadModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h2>Скачать макет</h2>
+            <p>Выберите формат:</p>
+            <div class="modal-buttons">
+                <button id="downloadJPG" class="modal-btn">JPG</button>
+                <button id="downloadPDF" class="modal-btn">PDF</button>
+            </div>
+            <button id="closeModal" class="modal-close">×</button>
+        </div>
+    </div>
 </body>
 
 </html>

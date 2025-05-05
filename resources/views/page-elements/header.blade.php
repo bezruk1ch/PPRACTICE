@@ -53,17 +53,17 @@
                 <nav class="header-nav">
                     <!-- Кнопки меню -->
                     <div class="menu-buttons">
-                    <a href="{{ route('constructor.index') }}"><button class="menu-button">Конструктор заказов</button></a>
+                    <a href="{{ route('constructor') }}"><button class="menu-button">Конструктор заказов</button></a>
                         <a href="{{ route('portfolio') }}"><button class="menu-button">Портфолио</button></a>
                         <a href="{{ route('about') }}"><button class="menu-button">О нас</button></a>
                         <a href="{{ route('contacts') }}"><button class="menu-button">Контакты</button></a>
                         <a href="{{ route('reviews') }}"><button class="menu-button">Отзывы</button></a>
                         <!-- Кнопка корзины -->
-                        <button class="cart-button">
+                        <a href="{{ route('cart') }}"><button class="cart-button">
                             <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
                             <span class="cart-text">Корзина</span>
                             <div class="cart-counter">0</div>
-                        </button>
+                        </button></a>
                     </div>
                 </nav>
             </div>

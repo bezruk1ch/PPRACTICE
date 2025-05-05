@@ -27,6 +27,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('role')->default('user');
+            
+            $table->boolean('is_admin')->default(false);
            // $table->string('avatar')->nullable();
         });
     }

@@ -7,11 +7,15 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CartController;
+
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ReviewController;
 
 use App\Models\Template;
 
@@ -26,17 +30,14 @@ use App\Models\Template;
 |
 */
 
+// Тест страница
+Route::get('/test', [TestController::class, 'index'])->name('test');
+
 // Главная страница
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Конструктор
-Route::get('/constructor', [ConstructorController::class, 'index'])->name('constructor.index');
-Route::get('/constructor/{category_id}', [ConstructorController::class, 'templates'])->name('constructor.templates');
-Route::get('/constructor/templates/{category}', [ConstructorController::class, 'showTemplates'])->name('constructor.templates');
-Route::get('/constructor/edit/{template}', [ConstructorController::class, 'edit'])->name('constructor.edit');
-Route::put('/constructor/update/{template}', [ConstructorController::class, 'update'])->name('constructor.update');
-Route::get('constructor/templates/{template}/edit', [ConstructorController::class, 'edit'])->name('constructor.edit');
-Route::post('constructor/templates/{template}', [ConstructorController::class, 'save'])->name('constructor.save');
+Route::get('/constructor', [ConstructorController::class, 'index'])->name('constructor');
 
 // Портфолио
 Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
@@ -47,12 +48,14 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 // Контакты
 Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::post('/admin/slides', [AdminController::class, 'updateSlides'])->name('admin.slides.update');
-    Route::post('/admin/orders/update', [AdminController::class, 'updateOrders'])->name('admin.orders.update');
-    Route::post('/admin/reviews/update', [AdminController::class, 'updateReviews'])->name('admin.reviews.update');
-    Route::post('/admin/users/update', [AdminController::class, 'updateUsers'])->name('admin.users.update');
+Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');  // Здесь используем POST
+});
+
+Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('admin.reviews.index');
 });
 
 // Личный кабинет
@@ -73,3 +76,10 @@ Route::post('/logout', function () {
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 require __DIR__ . '/auth.php';
+
+// Корзина заказов
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear',  [CartController::class, 'clear'])->name('cart.clear');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->middleware('auth')->name('cart.checkout');

@@ -343,6 +343,3 @@ document.addEventListener('DOMContentLoaded', function () {
         scrollReviews(1);
     });
 });
-
-// КОНСТРУКТОР
-

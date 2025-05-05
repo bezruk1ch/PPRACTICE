@@ -18,7 +18,7 @@
 
 </head>
 
-<body class="m-0 bg-[#2C3E50] font-montserrat">
+<body class="m-0 bg-[#2C3E50]">
     @include('page-elements.header')
 
     <div class="section">

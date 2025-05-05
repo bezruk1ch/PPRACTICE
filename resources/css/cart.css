@@ -1,0 +1,181 @@
+/* Общие обёртки */
+.profile-section {
+    background-color: #212A33;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    color: white;
+}
+
+.container-profile {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.profile-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Пустая корзина */
+#cart-empty p {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+#cart-empty .save-btn {
+    display: inline-block;
+}
+
+/* Таблица корзины */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2C3E50;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.cart-table thead {
+    background-color: #1F2A36;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 12px 16px;
+    color: #ECEFF1;
+    font-size: 16px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+
+.cart-table tbody tr:nth-child(even) {
+    background-color: #273444;
+}
+
+.cart-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Инпут количества */
+.cart-table input[type="number"] {
+    width: 60px;
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Кнопка удаления */
+.cart-table .remove-btn {
+    background: transparent;
+    border: none;
+    color: #E74C3C;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color .2s;
+}
+
+.cart-table .remove-btn:hover {
+    color: #FF6B6B;
+}
+
+/* Секция итогов и кнопок */
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.cart-summary .total {
+    color: #ECEFF1;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.cart-summary .total span:last-child {
+    margin-left: 8px;
+    color: #F1C40F;
+}
+
+/* Кнопки действий */
+.cart-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.side-btn {
+    background-color: #ECEFF1;
+    color: #2C3E50;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color .3s, transform .2s;
+}
+
+.side-btn:hover {
+    background-color: #D0D7DE;
+    transform: translateY(-2px);
+}
+
+.save-btn {
+    background-color: #E74C3C;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color .3s, transform .2s;
+}
+
+.save-btn:hover {
+    background-color: #C0392B;
+    transform: translateY(-2px);
+}
+
+.option-select {
+    color: #1a1a1a;
+    /* тёмно-серый или замени на black */
+    background-color: #ffffff;
+    /* светлый фон, чтобы тёмный текст был виден */
+}
+
+input {
+    color: #1a1a1a;
+    background-color: #ffffff;
+  }
+
+/* Адаптив */
+@media (max-width: 768px) {
+
+    .cart-table th,
+    .cart-table td {
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+
+    .cart-summary {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cart-actions {
+        justify-content: center;
+    }
+}

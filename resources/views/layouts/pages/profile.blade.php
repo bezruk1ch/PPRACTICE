@@ -83,7 +83,12 @@
                 <h3>Текущие заказы</h3>
                 <ul>
                     @forelse($currentOrders as $order)
-                    <li>{{ $order->title }} - {{ $order->status }}</li>
+                    <li>
+                        <strong>Вид товара:</strong> {{ $order->product_type }} <br>
+                        <strong>Количество:</strong> {{ $order->quantity }} <br>
+                        <strong>Сумма:</strong> {{ number_format($order->quantity * $order->price, 2) }} <br>
+                        <strong>Статус:</strong> {{ $order->status }}
+                    </li>
                     @empty
                     <li>Нет активных заказов.</li>
                     @endforelse

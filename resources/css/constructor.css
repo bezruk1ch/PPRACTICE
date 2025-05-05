@@ -1,0 +1,932 @@
+/* ========== СБРОС ========== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* чтобы контент не уезжал под неё */
+body {
+    padding-top: 60px;
+    background: #f0f0f0;
+    /* равен высоте .top-bar */
+}
+
+/* 1) первая верхняя панель */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2C3E50;
+    color: #fff;
+    padding: 10px 30px;
+    font-family: 'Montserrat', sans-serif;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    /* подберите под свою реальную высоту */
+    z-index: 1000;
+
+}
+
+.top-bar__left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Блок логотипа */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* расстояние между картинкой и текстом */
+}
+
+/* Сама картинка логотипа */
+.logo-img {
+    height: 40px;
+    /* подгоните под вашу высоту */
+    width: auto;
+    display: block;
+}
+
+/* Текст рядом с логотипом */
+.logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #E74C3C;
+    /* красный цвет */
+    line-height: 1;
+    /* чтобы выровнять по центру по высоте */
+    text-transform: uppercase;
+    /* при желании */
+}
+
+.site-nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.download-btn {
+    background: #E74C3C;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    background: #C0392B;
+}
+
+.editor-bar-toolbox {
+    display: flex;
+    position: relative;
+    /* теперь дочерние absolute будут внутри этого блока */
+}
+
+.editor-bar-canvas {
+    flex: 1;
+    /* занимает всё оставшееся место */
+    display: flex;
+    flex-direction: column;
+    margin-left: 180px;
+    /* компенсируем ширину toolbox */
+    margin-top: 100px;
+    /* под верхним баром */
+    padding: 20px;
+}
+
+
+/* 2) вторая верхняя (редактор-бар) */
+.editor-bar {
+    padding: 10px 30px;
+    background: #fff;
+    color: #2C3E50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Lato', sans-serif;
+    align-self: flex-start;
+
+    position: fixed;
+    top: 60px;
+    /* тот же отступ, что и #toolbox */
+    left: 180px;
+    /* сразу справа от #toolbox */
+    right: 0;
+    height: 60px;
+    /* подберите под реальную высоту */
+    z-index: 960;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.editor-title {
+    font-size: 18px;
+}
+
+.editor-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* заголовок вшиваем как элемент слева от базовых действий */
+.editor-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.action-btn {
+    background: #E74C3C;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    margin-left: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.editor-bar .action-btn:hover {
+    background: #C0392B;
+}
+
+.action-btn:hover {
+    background: #c0392b;
+}
+
+.action-btn:disabled {
+    background: #888;
+    cursor: not-allowed;
+}
+
+#editor-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background: #fff;
+    color: #2C3E50;
+    position: fixed;
+    top: 60px;
+    left: 180px;
+    right: 0;
+    height: 60px;
+    z-index: 960;
+}
+
+.image-edit-panel {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: #1e1e1e;
+    /* тёмный фон */
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    color: white;
+}
+
+.image-edit-panel button,
+.image-edit-panel select,
+.image-edit-panel input[type="number"],
+.image-edit-panel input[type="color"],
+.image-edit-panel input[type="range"] {
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+.image-edit-panel button {
+    padding: 6px 10px;
+    border: none;
+    background: #333;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.image-edit-panel button:hover,
+.image-edit-panel select:hover,
+.image-edit-panel input:hover {
+    border-color: #888;
+}
+
+
+/* ПАНЕЛЬ РЕДАКТИРОВАНИЯ ТЕКСТА */
+.text-edit-panel {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: #1e1e1e;
+    /* тёмный фон */
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', 'Lato', sans-serif;
+}
+
+
+.text-edit-panel button,
+.text-edit-panel select,
+.text-edit-panel input[type="number"],
+.text-edit-panel input[type="color"],
+.text-edit-panel input[type="range"] {
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+.text-edit-panel button {
+    padding: 6px 10px;
+    border: none;
+    background: #333;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.text-edit-panel button:hover,
+.text-edit-panel select:hover,
+.text-edit-panel input:hover {
+    border-color: #888;
+}
+
+/* ========== DROPDOWN МЕНЮ ========== */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    padding: 6px 10px;
+    background: #333;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #2c2c2c;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 999;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: flex;
+}
+
+.dropdown-menu button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px 0;
+    text-align: left;
+}
+
+.dropdown-menu hr {
+    border: 0;
+    height: 1px;
+    background: #444;
+    margin: 5px 0;
+}
+
+
+
+
+
+/* 3) основная левая панель */
+#toolbox {
+    width: 180px;
+    height: 100%;
+    background: #2C3E50;
+    /* или ваш фирменный темный цвет */
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    position: fixed;
+    top: 60px;
+    /* сразу под .top-bar */
+    left: 0;
+    bottom: 0;
+    width: 180px;
+    /* ваша ширина #toolbox */
+    overflow-y: auto;
+    z-index: 950;
+}
+
+.tool-item {
+    background: #E74C3C;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.tool-item:hover {
+    background: #C0392B;
+}
+
+/* Обёртка и кнопки над/под холстом */
+.canvas-wrapper {
+    position: relative;
+    /* теперь все абсолютные дети привяжутся к нему */
+    padding: 20px;
+    /* по желанию */
+    background: #f0f0f0;
+    /* фон рабочей области */
+    /* можно добавить fixed ширину/высоту или max-width */
+    margin: 0 auto;
+    /* центрируем по ширине страницы */
+}
+
+
+/* Верхние кнопки */
+.canvas-controls-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.side-btn {
+    background: #E74C3C;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.side-btn:hover {
+    background: #C0392B;
+}
+
+/* Холст */
+#canvas {
+    width: 700px;
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #444;
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    margin: auto;
+}
+
+#canvas.tpl-brochure {
+    width: 600px;
+    height: 800px;
+    background-color: #fff;
+}
+
+#canvas.tpl-brochure::before,
+#canvas.tpl-brochure::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ccc;
+}
+
+#canvas.tpl-brochure::before {
+    left: 33.33%;
+}
+
+#canvas.tpl-brochure::after {
+    left: 66.66%;
+}
+
+#canvas.tpl-tshirt {
+    width: 400px;
+    height: 500px;
+    background: url('/img/constructor/tshirt.png') no-repeat center/contain;
+}
+
+#canvas.tpl-poster {
+    width: 800px;
+    height: 1200px;
+    background: #fff;
+}
+
+#canvas.tpl-business-card {
+    width: 700px;
+    height: 400px;
+    background: #fff;
+}
+
+/* Нижние кнопки */
+.canvas-controls-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.side-switch {
+    display: flex;
+    gap: 8px;
+}
+
+.side-switch .side-btn {
+    flex: 1;
+}
+
+.side-switch .active {
+    background: #2C3E50;
+}
+
+#proceedBtn {
+    background-color: #E74C3C;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#proceedBtn:hover {
+    background-color: #C0392B;
+}
+
+/* Элементы внутри canvas */
+#canvas .draggable {
+    position: absolute;
+    cursor: move;
+}
+
+#canvas .text {
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: #000;
+    background-color: transparent;
+    padding: 5px;
+    position: absolute;
+}
+
+#canvas img.draggable {
+    max-width: 300px;
+    max-height: 200px;
+    object-fit: contain;
+    position: absolute;
+}
+
+
+
+/* Линии безопасности */
+.safety-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.safety-line {
+    position: absolute;
+    border: 1px dashed gray;
+}
+
+.safety-line.top {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 0;
+}
+
+.safety-line.bottom {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    height: 0;
+}
+
+.safety-line.left {
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: 0;
+}
+
+.safety-line.right {
+    top: 10px;
+    bottom: 10px;
+    right: 10px;
+    width: 0;
+}
+
+/* ========== РУЧКИ ИЗМЕНЕНИЯ РАЗМЕРА ========== */
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #00f;
+    border: 1px solid white;
+    z-index: 10;
+}
+
+.resize-handle.top-left {
+    top: -5px;
+    left: -5px;
+    cursor: nwse-resize;
+}
+
+.resize-handle.top-right {
+    top: -5px;
+    right: -5px;
+    cursor: nesw-resize;
+}
+
+.resize-handle.bottom-left {
+    bottom: -5px;
+    left: -5px;
+    cursor: nesw-resize;
+}
+
+.resize-handle.bottom-right {
+    bottom: -5px;
+    right: -5px;
+    cursor: nwse-resize;
+}
+
+.resize-handle.n {
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+}
+
+.resize-handle.e {
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+}
+
+.resize-handle.s {
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+}
+
+.resize-handle.w {
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+}
+
+/* Пунктирная рамка при наведении на НЕвыбранный блок */
+.text-element:hover:not(.selected) {
+    outline: 1px dashed #333;
+}
+
+/* Сплошная рамка для выбранного блока — как в норме, так и при hover */
+.text-element.selected,
+.text-element.selected:hover {
+    outline: 2px solid #333;
+}
+
+.locked {
+    opacity: 0.5;
+    border: 2px dashed #888;
+}
+
+/* ========== МОДАЛ ПРЕДПРОСМОТРА ========== */
+.preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    /* включается через JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+.preview-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 32px;
+    width: 360px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.preview-title {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2C3E50;
+}
+
+.preview-list {
+    list-style: disc inside;
+    text-align: left;
+    margin: 0 0 24px;
+    padding: 0;
+    color: #34495E;
+}
+
+.preview-list li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.preview-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.preview-btn {
+    background: #E74C3C;
+    color: #fff;
+    border: none;
+    padding: 10px 0;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.preview-btn:hover {
+    background: #C0392B;
+}
+
+@media (min-width: 480px) {
+    .preview-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .preview-btn {
+        flex: 1 1 40%;
+        max-width: 140px;
+    }
+}
+
+.zoom-controls {
+    position: absolute;
+    right: 16px;
+    /* отступ от правого края рабочей области */
+    bottom: 16px;
+    /* отступ от низа рабочей области */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 4px;
+    pointer-events: auto;
+    z-index: 100;
+    /* над всем внутри .canvas-wrapper */
+}
+
+/* кнопки зума */
+.zoom-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    background: #E74C3C;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.zoom-controls button:hover {
+    background: #C0392B;
+}
+
+#zoomValue {
+    min-width: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+}
+
+#slide-toolbox {
+    position: absolute;
+    top: 60px;
+    /* под первой верхней панелью */
+    left: 180px;
+    /* сразу справа от панели #toolbox (180px её ширина) */
+    width: 300px;
+    height: calc(100% - 60px);
+    /* всю оставшуюся высоту контейнера */
+    background: #1e1e1e;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 2;
+    /* чуть выше canvas, но ниже самой панели-tools */
+
+    /* прятать/показывать */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+#slide-toolbox.visible {
+    transform: translateX(0);
+}
+
+#slide-toolbox .btn {
+    display: inline-block;
+    margin-bottom: 10px;
+    background: #444;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+#slide-toolbox a {
+    display: block;
+    color: #ddd;
+    margin-top: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 6px 12px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+#slide-toolbox a:hover {
+    background: #444;
+}
+
+.slide-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    line-height: 1;
+    color: #fff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.slide-close:hover {
+    color: #E74C3C;
+}
+
+.toolbox-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 6px;
+}
+
+.section-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tool-btn {
+    background-color: #333;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tool-btn:hover {
+    background-color: #444;
+}
+
+.color-picker,
+.text-input,
+.upload-input {
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.canvas-area {
+    transition: transform 0.2s ease;
+    transform-origin: center center;
+    /* или center center, как удобнее */
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: #0077ff;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
