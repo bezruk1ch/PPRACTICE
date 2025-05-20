@@ -8,6 +8,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/constructor.css'])
     @vite(['resources/js/constructor.js'])
+
+    @vite(['resources/js/constructor/index.js'])
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&family=Oswald:wght@200;400;600&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 
@@ -188,9 +190,9 @@
             </div> -->
 
             <!-- Слои и выравнивание по холсту -->
-            <div class="dropdown">
-                <button class="dropdown-toggle" title="Слои и выравнивание">📐</button>
-                <div class="dropdown-menu">
+            <div class="dropdown" id="layer-dropdown">
+                <button class="dropdown-toggle" title="Слои и выравнивание" id="layer-toggle">📐</button>
+                <div class="dropdown-menu" id="layer-menu">
                     <div><span>📤</span> <button onclick="bringForward()">На передний план</button></div>
                     <div><span>📥</span> <button onclick="sendBackward()">На задний план</button></div>
                     <hr>
@@ -260,6 +262,7 @@
                 <button class="btn preview-btn" data-action="download">Скачать макет</button>
                 <button class="btn preview-btn" data-action="edit">Вернуться к редактированию</button>
             </div>
+            <button id="closePreviewModal" class="modal-close">×</button>
         </div>
     </div>
 
@@ -277,7 +280,7 @@
                 <button id="downloadJPG" class="modal-btn">JPG</button>
                 <button id="downloadPDF" class="modal-btn">PDF</button>
             </div>
-            <button id="closeModal" class="modal-close">×</button>
+            <button id="closeDownloadModal" class="modal-close">×</button>
         </div>
     </div>
 </body>

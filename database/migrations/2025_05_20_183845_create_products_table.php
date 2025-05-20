@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('design_templates', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type'); // business_card, booklet, flyer
-            $table->string('thumbnail');
-            $table->json('structure'); // JSON с описанием полей
+            $table->string('name'); // "Визитка", "Футболка", "Буклет", "Постер"
+            $table->decimal('base_price', 10, 2)->default(0);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('design_templates');
+        Schema::dropIfExists('products');
     }
 };

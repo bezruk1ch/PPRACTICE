@@ -18,8 +18,6 @@ class DatabaseSeeder extends Seeder
             PortfolioSeeder::class,
             // AdminSeeder::class,
             ReviewSeeder::class,
-            CategorySeeder::class,
-            TemplateSeeder::class,
             
         ]); 
     }

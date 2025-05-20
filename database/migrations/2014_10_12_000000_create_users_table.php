@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('role')->default('user');
             
             $table->boolean('is_admin')->default(false);
-           // $table->string('avatar')->nullable();
+
         });
     }
 

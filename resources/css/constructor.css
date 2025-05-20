@@ -322,6 +322,10 @@ body {
     margin: 5px 0;
 }
 
+.dropdown-menu.show {
+    display: flex !important;
+}
+
 
 
 

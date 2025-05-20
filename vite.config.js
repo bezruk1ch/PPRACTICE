@@ -21,8 +21,11 @@ export default defineConfig({
                 'resources/js/cart.js',
                 'resources/css/admin.css',
                 'resources/css/admin-admin.css',
-
-                'resources/css/constructor.css', 'resources/js/constructor.js',
+                
+                //КОНСТРУКТОР ЗАКАЗОВ
+                'resources/js/constructor/index.js',
+                'resources/css/constructor.css', 
+                'resources/js/constructor.js',
             ],
             refresh: true,
         }),

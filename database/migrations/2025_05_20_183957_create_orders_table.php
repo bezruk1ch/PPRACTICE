@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Название категории (например, визитки, футболки)
-            $table->string('image')->nullable(); // Для изображения
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('status', ['cart', 'pending', 'completed', 'cancelled'])->default('cart');
+            $table->decimal('total_price', 10, 2)->default(0);
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('orders');
     }
 };

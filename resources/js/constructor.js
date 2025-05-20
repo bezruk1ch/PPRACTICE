@@ -12,24 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let offsetX = 0;
     let offsetY = 0;
     let selectedElement = null;
-    let selectedTextBlock = null;
     let resizing = false;
     let resizingElement = null;
     let resizingHandle = null;
-    let startX = 0, startY = 0, startWidth = 0, startHeight = 0;
-    let startLeft = 0, startTop = 0;
+    let startX = 0,  startWidth = 0;
+    let startLeft = 0 ;
     let currentZIndex = 1;
+
+    /*
 
     const proceedBtn = document.getElementById('proceedBtn');
     const previewModal = document.getElementById('preview-modal');
     const previewBtns = previewModal.querySelectorAll('.preview-buttons .btn');
 
-    // 1. Открыть модалку при клике «Продолжить»
+    //ФУНКЦИЯ ОТКРЫТИЯ МОДАЛЬНОГО ОКНА ПРИ КЛИКЕ НА КНОПКУ "ПРОДОЛЖИТЬ"
     proceedBtn.addEventListener('click', () => {
         previewModal.style.display = 'flex';
     });
 
-    // 2. Обработчики кнопок внутри модалки
+    //ОБРАБОТКА КНОПОК ВНУТРИ МОДАЛЬНОГО ОКНА "ПРОВЕРЬТЕ ВАШ МАКЕТ"
     previewBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const action = btn.textContent.trim();
@@ -67,7 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === previewModal) {
             previewModal.style.display = 'none';
         }
-    });
+    }); 
+    
+    
 
     document.querySelector('.download-btn').addEventListener('click', () => {
         document.getElementById('downloadModal').style.display = 'flex';
@@ -77,8 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('downloadModal').style.display = 'none';
     });
 
+    //ФУНКЦИЯ СКАЧАТЬ МАКЕТ
     const canvasElement = document.getElementById('canvas');
 
+    //СКАЧАТЬ ИЗОБРАЖЕНИЕМ
     document.getElementById('downloadJPG').addEventListener('click', () => {
         html2canvas(canvasElement).then(canvas => {
             const link = document.createElement('a');
@@ -89,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    //СКАЧАТЬ ФАЙЛОМ
     document.getElementById('downloadPDF').addEventListener('click', () => {
         html2canvas(canvasElement).then(canvas => {
             const imgData = canvas.toDataURL('image/jpeg');
@@ -106,9 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeModal() {
         document.getElementById('downloadModal').style.display = 'none';
     }
+        
+
+    */ 
 
     const editorControls = document.getElementById('editor-controls');
 
+    
     function showEditor(type) {
         editorControls.innerHTML = '';
         const title = document.createElement('div');
@@ -142,6 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // при загрузке — показываем дефолт
     showEditor('default');
+
+     /*
 
     const slideToolbox = document.getElementById('slide-toolbox');
     const sections = slideToolbox.querySelectorAll('.toolbox-section');
@@ -296,6 +308,9 @@ document.addEventListener('DOMContentLoaded', () => {
             setCanvasTemplate(type);
         });
     });
+
+     */ 
+     
 
 
 
@@ -833,7 +848,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedElement.style.transform = `rotate(${deg}deg)`;
         if (typeof saveState === 'function') saveState();
     };
-
 
     // ФУНКЦИИ ИЗМЕНЕНИЯ СТИЛЯ ТЕКСТА
     window.bringForward = function () {
