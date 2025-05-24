@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('product_options', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('name'); //Пример - "Бумага: глянцевая"
-            $table->string('category'); //Пример - "Бумага", "Материал"
-            $table->decimal('price_modifier', 10, 2)->default(0);
+            $table->string('option_type');
+            $table->string('option_name');
+            $table->decimal('price_modifier', 10, 2);
             $table->timestamps();
         });
     }

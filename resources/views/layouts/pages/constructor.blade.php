@@ -23,9 +23,9 @@
                 <div class="logo-text">А ПЛЮС</div>
             </div>
             <nav class="site-nav">
-                <a href="#">Главная</a>
-                <a href="#">Вход</a>
-                <a href="#">Регистрация</a>
+                <a href="{{ route('home') }}">Главная</a>
+                <a href="{{ route('login') }}">Вход</a>
+                <a href="{{ route('register') }}">Регистрация</a>
             </nav>
         </div>
         <div class="top-bar__right">
@@ -91,11 +91,15 @@
             <div id="base-options" class="toolbox-section" style="display: none;">
                 <h3 class="section-title">Основа</h3>
                 <div class="section-group">
-                    <button class="tool-btn">Визитка</button>
-                    <button class="tool-btn">Футболка</button>
-                    <button class="tool-btn">Постер</button>
-                    <button class="tool-btn">Буклет</button>
-                    <!-- можно добавить другие -->
+                    @foreach($products as $product)
+                    <button class="tool-btn"
+                        data-product-type="{{ $product->type }}"
+                        data-template-width="{{ $product->template_width }}"
+                        data-template-height="{{ $product->template_height }}"
+                        data-template-image="{{ asset('storage/' . $product->template_image) }}">
+                        {{ $product->type }}
+                    </button>
+                    @endforeach
                 </div>
             </div>
         </aside>
@@ -263,6 +267,21 @@
                 <button class="btn preview-btn" data-action="edit">Вернуться к редактированию</button>
             </div>
             <button id="closePreviewModal" class="modal-close">×</button>
+        </div>
+    </div>
+
+    <div id="projectNameModal" class="preview-modal" style="display: none;">
+        <div class="preview-content">
+            <h2 class="preview-title">Название проекта</h2>
+            <div class="project-name-input">
+                <input type="text" id="projectNameInput" placeholder="Без названия">
+                <small>Оставьте поле пустым для значения по умолчанию</small>
+            </div>
+            <div class="preview-buttons">
+                <button class="btn preview-btn confirm-btn">Подтвердить</button>
+                <button class="btn preview-btn cancel-btn">Отмена</button>
+            </div>
+            <button class="modal-close close-project-modal">×</button>
         </div>
     </div>
 

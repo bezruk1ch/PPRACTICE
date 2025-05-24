@@ -844,6 +844,13 @@ body {
     margin-bottom: 30px;
 }
 
+.main-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+}
+
+
 .section-title {
     font-size: 18px;
     margin-bottom: 12px;
@@ -933,4 +940,28 @@ body {
     background: none;
     border: none;
     cursor: pointer;
+}
+
+/* Базовые стили холста */
+.canvas-template {
+    background-color: #fff;
+    border: 2px dashed #ccc;
+    margin: 20px auto;
+}
+
+/* Специфичные стили шаблонов */
+.tpl-business-card {
+    width: 600px;
+    height: 300px;
+}
+
+.tpl-tshirt {
+    background: url('/images/templates/tshirt.png') no-repeat center/contain;
+    width: 800px;
+    height: 850px;
+}
+
+.tpl-poster {
+    width: 1000px;
+    height: 1400px;
 }

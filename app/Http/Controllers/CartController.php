@@ -9,67 +9,87 @@ use App\Models\Order;   // модель заказа
 
 class CartController extends Controller
 {
-    public function index(Request $req)
+    public function addToCart(Request $request)
     {
-        // В простейшем варианте храним корзину в сессии:
-        $cart = session()->get('cart', []);
-        // $cart = [
-        //    product_id => ['qty' => 2, 'product' => Product],
-        //    ...
-        // ];
-
-
-
-        return view('layouts.pages.cart', compact('cart'));
-    }
-
-    public function update(Request $req)
-    {
-        $id  = $req->input('product_id');
-        $qty = max(1, (int)$req->input('qty', 1));
-        $cart = session()->get('cart', []);
-        if (isset($cart[$id])) {
-            $cart[$id]['qty'] = $qty;
-            session()->put('cart', $cart);
-        }
-        return back();
-    }
-
-    public function remove(Request $req)
-    {
-        $id = $req->input('product_id');
-        $cart = session()->get('cart', []);
-        unset($cart[$id]);
-        session()->put('cart', $cart);
-        return back();
-    }
-
-    public function clear()
-    {
-        session()->forget('cart');
-        return back();
-    }
-
-    public function checkout(Request $request)
-    {
-        $cart = json_decode($request->input('cart'), true);
-
-        if (empty($cart)) {
-            return response()->json(['success' => false, 'message' => 'Корзина пуста']);
-        }
-
-        // Пример базового сохранения заказа (упрости или доработай под свою логику)
-        foreach ($cart as $item) {
-            \App\Models\Order::create([
-                'user_id' => Auth::id(),
-                'product_name' => $item['name'] ?? 'Неизвестный товар',
-                'quantity' => $item['quantity'] ?? 1,
-                'price' => $item['price'] ?? 0,
-                'total' => ($item['price'] ?? 0) * ($item['quantity'] ?? 1),
-                // можно добавить дополнительные поля, например: макет, бумага и т.п.
+        try {
+            $validated = $request->validate([
+                'base_type' => 'required|string',
+                'parameters' => 'sometimes|array'
             ]);
-        }
 
-        return response()->json(['success' => true]);
+            $cart = session()->get('cart', []);
+
+            $item = [
+                'id' => uniqid(),
+                'project_name' => session()->get('project_name', 'Без названия'),
+                'product_type' => $validated['base_type'],
+                'parameters' => $validated['parameters'],
+                'quantity' => 1,
+                'price' => $this->calculatePrice(
+                    $validated['base_type'],
+                    $validated['parameters']
+                )
+            ];
+
+            session()->put('cart', [...$cart, $item]);
+
+            return redirect()->route('cart.view');
+        } catch (\Exception $e) {
+            // Логирование ошибки
+            \Log::error('Ошибка добавления в корзину: ' . $e->getMessage());
+
+            return back()->withErrors('Произошла ошибка: ' . $e->getMessage());
+        }
+    }
+
+    public function calculatePrice(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'product_type' => 'required|string|exists:products,type',
+                'selected_options' => 'required|array'
+            ]);
+
+            $price = $this->calculateItemPrice(
+                $validated['product_type'],
+                $validated['selected_options']
+            );
+
+            return response()->json([
+                'price' => $price,
+                'formatted' => number_format($price, 2, ',', ' ') . ' ₽'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Ошибка расчета цены: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function calculateItemPrice($productType, $params)
+    {
+        try {
+            $product = Product::with('options')
+                ->where('type', $productType)
+                ->firstOrFail();
+
+            $total = $product->base_price;
+
+            foreach ($params as $optionType => $optionValue) {
+                $option = $product->options
+                    ->where('option_type', $optionType)
+                    ->where('option_name', $optionValue)
+                    ->first();
+
+                if ($option) {
+                    $total += $option->price_modifier;
+                }
+            }
+
+            return $total;
+        } catch (\Exception $e) {
+            \Log::error("Price calculation failed for {$productType}: " . $e->getMessage());
+            throw new \Exception("Невозможно рассчитать стоимость");
+        }
     }
 }

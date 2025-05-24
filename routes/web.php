@@ -30,6 +30,13 @@ use App\Models\Template;
 |
 */
 
+Route::middleware(['auth'])->group(function () {
+    // Корзина
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/calculate-price', [CartController::class, 'calculatePrice'])->name('cart.calculate-price');
+    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+});
+
 // Тест страница
 Route::get('/test', [TestController::class, 'index'])->name('test');
 
@@ -76,10 +83,3 @@ Route::post('/logout', function () {
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 require __DIR__ . '/auth.php';
-
-// Корзина заказов
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/clear',  [CartController::class, 'clear'])->name('cart.clear');
-Route::post('/cart/checkout', [CartController::class, 'checkout'])->middleware('auth')->name('cart.checkout');

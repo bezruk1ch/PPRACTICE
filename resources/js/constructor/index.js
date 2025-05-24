@@ -1,5 +1,22 @@
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
 import { initPreviewModal, initDownloadModal } from './modals';
 import { initToolbox } from './toolbox.js';
+import { initTextEditorPanel } from './text-editor-panel.js';
+import { showEditor, initEditorPanel } from './editor-panel.js';
+window.showEditor = showEditor;
+import { initGlobals } from './globals.js';
+import { initZoomControls } from './zoom-controls.js';
+import { initDeleteHandler } from './delete-handler.js';
+import { initImageEditorPanel } from './image-editor-panel.js';
+
+
+
+
+// Подключаем html2canvas и jsPDF глобально
+window.html2canvas = html2canvas;
+window.jsPDF = jsPDF;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Кнопка "Продолжить", открывающая модальное окно предпросмотра
@@ -21,18 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Инициализируем панель инструментов
     initToolbox();
-});
 
-    //import('./canvas-init');
-    //import('./toolbox');
-    //import('./background-tools');
-    //import('./image-tools');
-    //import('./base-templates');
-    //import('./zoom-controls');
-    //import('./text-elements');
-    //import('./image-elements');
-    //import('./editor-panel');
-    //import('./alignment-tools');
-    //import('./delete-copy-lock');
-    //import('./drag-resize');
-    //import('./utils');
+    // Инициализируем панель редактирования текста
+    initTextEditorPanel();
+
+    initEditorPanel();
+
+    initGlobals();
+
+    initZoomControls();
+
+    initDeleteHandler();
+
+    initImageEditorPanel();
+});

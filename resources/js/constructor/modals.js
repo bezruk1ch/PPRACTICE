@@ -1,63 +1,135 @@
 // modals.js
-
-
-// ====== МОДАЛЬНОЕ ОКНО "ПРОВЕРЬТЕ МАКЕТ" ======
+// ====== МОДАЛЬНЫЕ ОКНА ======
 
 /**
- * Инициализирует модальное окно проверки макета
+ * Инициализирует модальные окна проверки макета и ввода названия проекта
  * @param {HTMLElement} proceedBtn - Кнопка "Продолжить", открывающая модалку
  */
 export function initPreviewModal(proceedBtn) {
   const previewModal = document.getElementById('preview-modal');
-  if (!previewModal || !proceedBtn) return;
+  const projectNameModal = document.getElementById('projectNameModal');
+  
+  if (!previewModal || !proceedBtn || !projectNameModal) return;
 
-  // Кнопки внутри модального окна
+  // Элементы управления
   const previewBtns = previewModal.querySelectorAll('.preview-buttons .btn');
+  const closePreviewBtn = document.getElementById('closePreviewModal');
+  const closeProjectNameBtn = projectNameModal.querySelector('.close-project-modal');
+  const cancelProjectNameBtn = projectNameModal.querySelector('.cancel-btn');
+  const confirmProjectNameBtn = projectNameModal.querySelector('.confirm-btn');
+  const projectNameInput = document.getElementById('projectNameInput');
 
-  // Кнопка закрытия модального окна
-  const closeBtn = document.getElementById('closePreviewModal');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      previewModal.style.display = 'none';
-    });
-  }
+  // Состояния модальных окон
+  let isProjectNameModalOpen = false;
 
-  // Открытие модального окна по кнопке "Продолжить"
-  proceedBtn.addEventListener('click', () => {
-    previewModal.style.display = 'flex';
+  // ====== ФУНКЦИИ ДЛЯ РАБОТЫ С МОДАЛКАМИ ======
+  
+  const togglePreviewModal = (show) => {
+    previewModal.style.display = show ? 'flex' : 'none';
+  };
+
+  const toggleProjectNameModal = (show) => {
+    projectNameModal.style.display = show ? 'flex' : 'none';
+    isProjectNameModalOpen = show;
+  };
+
+  const resetProjectNameInput = () => {
+    projectNameInput.value = '';
+    projectNameInput.placeholder = 'Без названия';
+  };
+
+  // ====== ОБРАБОТЧИКИ СОБЫТИЙ ======
+  
+  // Открытие главной модалки проверки
+  proceedBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    togglePreviewModal(true);
   });
 
-  // Обработчики на кнопки действий внутри окна
+  // Обработка действий в модалке проверки
   previewBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const action = btn.textContent.trim();
+      const action = btn.dataset.action;
 
       switch (action) {
-        case 'Лицевая сторона':
+        case 'front':
           document.getElementById('frontSideBtn')?.click();
           break;
-        case 'Оборотная сторона':
+        case 'back':
           document.getElementById('backSideBtn')?.click();
           break;
-        case 'Сделать заказ':
-          window.location.href = '/cart';
+        case 'order':
+          togglePreviewModal(false);
+          toggleProjectNameModal(true);
           break;
-        case 'Скачать макет':
+        case 'download':
           document.querySelector('.download-btn')?.click();
           break;
-        case 'Вернуться к редактированию':
-          previewModal.style.display = 'none';
+        case 'edit':
+          togglePreviewModal(false);
           break;
       }
     });
   });
 
-  // Закрытие модалки по клику вне содержимого
-  previewModal.addEventListener('click', e => {
-    if (e.target === previewModal) {
-      previewModal.style.display = 'none';
+  // Обработка подтверждения названия проекта
+  confirmProjectNameBtn.addEventListener('click', () => {
+    const projectName = projectNameInput.value.trim() || 'Без названия';
+    
+    // Сохраняем название в sessionStorage
+    sessionStorage.setItem('currentProjectName', projectName);
+    
+    // Перенаправляем в корзину
+    window.location.href = '/cart';
+  });
+
+  // Закрытие модалок
+  const handleClosePreview = () => togglePreviewModal(false);
+  const handleCloseProjectName = () => {
+    toggleProjectNameModal(false);
+    togglePreviewModal(true);
+    resetProjectNameInput();
+  };
+
+  // Навешиваем обработчики закрытия
+  closePreviewBtn?.addEventListener('click', handleClosePreview);
+  closeProjectNameBtn?.addEventListener('click', handleCloseProjectName);
+  cancelProjectNameBtn?.addEventListener('click', handleCloseProjectName);
+
+  // Закрытие по клику вне модалки
+  const handleOutsideClick = (e, modal, closeHandler) => {
+    if (e.target === modal) closeHandler();
+  };
+
+  previewModal.addEventListener('click', (e) => 
+    handleOutsideClick(e, previewModal, handleClosePreview));
+  
+  projectNameModal.addEventListener('click', (e) => 
+    handleOutsideClick(e, projectNameModal, handleCloseProjectName));
+
+  // Закрытие по ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (isProjectNameModalOpen) {
+        handleCloseProjectName();
+      } else if (previewModal.style.display === 'flex') {
+        handleClosePreview();
+      }
     }
   });
+
+  // Сброс данных при закрытии страницы
+  window.addEventListener('beforeunload', () => {
+    sessionStorage.removeItem('currentProjectName');
+  });
+}
+
+// Инициализация модалки названия проекта
+export function initProjectNameModal() {
+  const projectName = sessionStorage.getItem('currentProjectName');
+  if (projectName) {
+    document.getElementById('projectNameInput').value = projectName;
+  }
 }
 
 // ====== МОДАЛЬНОЕ ОКНО "СКАЧАТЬ МАКЕТ" ======

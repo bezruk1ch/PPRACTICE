@@ -107,52 +107,71 @@ export function initToolbox() {
   }
 
   // Функционал вкладки "Основа"
-  const baseSection = document.getElementById('base-options');
-  if (baseSection) {
-    const typeMap = {
-      'Визитка': 'business-card',
-      'Футболка': 'tshirt',
-      'Постер': 'poster',
-      'Буклет': 'brochure'
+  // constructor.js
+
+  // Функция применения шаблона
+  function applyCanvasTemplate(template) {
+    const canvas = document.getElementById('canvas');
+    const wrapper = document.getElementById('canvas-wrapper');
+
+    // Сохраняем пропорции интерфейса
+    const prevScroll = {
+      left: wrapper.scrollLeft,
+      top: wrapper.scrollTop
     };
-    baseSection.querySelectorAll('.tool-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const key = btn.textContent.trim();
-        const type = typeMap[key] || 'custom';
-        setCanvasTemplate(type);
-      });
+
+    // Применяем новые размеры
+    canvas.style.width = `${template.width}px`;
+    canvas.style.height = `${template.height}px`;
+
+    // Фоновое изображение
+    canvas.style.backgroundImage = template.image
+      ? `url('${template.image}')`
+      : '';
+
+    // Восстанавливаем позицию скролла
+    requestAnimationFrame(() => {
+      wrapper.scrollTo(prevScroll.left, prevScroll.top);
+    });
+
+    // Обновляем направляющие
+    updateSafetyLines(template.width, template.height);
+  }
+
+  // Функция обновления направляющих
+  function updateSafetyLines(width, height) {
+    const offset = 20;
+    document.querySelectorAll('.safety-line').forEach(line => {
+      line.style.display = 'block';
+      if (line.classList.contains('top')) line.style.top = `${offset}px`;
+      if (line.classList.contains('right')) line.style.right = `${offset}px`;
+      if (line.classList.contains('bottom')) line.style.bottom = `${offset}px`;
+      if (line.classList.contains('left')) line.style.left = `${offset}px`;
     });
   }
 
-  /**
-   * Вставляет изображение на холст и делает его перетаскиваемым
-   */
-  function insertImageOnCanvas(src) {
-    const img = new Image();
-    img.src = src;
-    img.classList.add('draggable');
-    img.style.position = 'absolute';
-    img.style.left = '100px';
-    img.style.top = '100px';
-    document.getElementById('canvas').appendChild(img);
-    makeElementDraggable(img);
-  }
+  // Обработчик выбора основы
+  document.querySelectorAll('[data-product-type]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const template = {
+        type: this.dataset.productType,
+        width: parseInt(this.dataset.templateWidth),
+        height: parseInt(this.dataset.templateHeight),
+        image: this.dataset.templateImage
+      };
 
-  /**
-   * Устанавливает шаблон холста (основа)
-   */
-  function setCanvasTemplate(type) {
-    const canvas = document.getElementById('canvas');
-    canvas.classList.remove('tpl-tshirt', 'tpl-poster', 'tpl-business-card', 'tpl-brochure');
-    canvas.classList.add(`tpl-${type}`);
-    canvas.style.background = '';
-    canvas.style.width = '';
-    canvas.style.height = '';
+      applyCanvasTemplate(template);
+      sessionStorage.setItem('selectedTemplate', JSON.stringify(template));
+    });
+  });
 
-    if (type === 'tshirt') {
-      canvas.style.background = "url('/img/constructor/tshirt.png') no-repeat center/contain";
-      canvas.style.width = '800px';
-      canvas.style.height = '850px';
+  // Восстановление при загрузке
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTemplate = sessionStorage.getItem('selectedTemplate');
+    if (savedTemplate) {
+      applyCanvasTemplate(JSON.parse(savedTemplate));
     }
-  }
+  });
+
+
 }

@@ -8,16 +8,23 @@ use App\Models\Category;
 
 class TemplateController extends Controller
 {
-    // Метод для отображения шаблонов по категориям
-    public function index(Request $request)
+    public function getTemplate($type)
     {
-        $categoryId = $request->get('category_id');
-        $templates = Template::when($categoryId, function ($query) use ($categoryId) {
-            return $query->where('category_id', $categoryId);
-        })->get();
+        $product = Product::where('type', $type)
+            ->with(['options' => function ($query) {
+                $query->where('option_type', 'template');
+            }])
+            ->firstOrFail();
 
-        $categories = Category::all(); // Получаем все категории
-
-        return view('templates.index', compact('templates', 'categories'));
+        return response()->json([
+            'css_class' => 'tpl-' . Str::slug($type),
+            'styles' => [
+                'width' => $product->template_width . 'px',
+                'height' => $product->template_height . 'px',
+                'background' => $product->template_image
+                    ? "url('{$product->template_image}') no-repeat center/contain"
+                    : ''
+            ]
+        ]);
     }
 }

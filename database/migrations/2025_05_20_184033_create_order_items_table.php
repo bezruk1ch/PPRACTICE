@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('layout_name');          // Название макета
-            $table->string('layout_image')->nullable();  // Фото макета
-            $table->integer('quantity')->default(1);
-            $table->decimal('unit_price', 10, 2)->default(0);
-            $table->decimal('total_price', 10, 2)->default(0);
+            $table->string('project_name')->default('Без названия');
+            $table->string('product_type'); // визитка, футболка и т.д.
+            $table->json('parameters'); // Доп. параметры в JSON
+            $table->integer('quantity');
+            $table->decimal('price_per_item', 10, 2);
             $table->timestamps();
         });
     }

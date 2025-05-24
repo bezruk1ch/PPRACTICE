@@ -59,7 +59,7 @@
                         <a href="{{ route('contacts') }}"><button class="menu-button">Контакты</button></a>
                         <a href="{{ route('reviews') }}"><button class="menu-button">Отзывы</button></a>
                         <!-- Кнопка корзины -->
-                        <a href="{{ route('cart') }}"><button class="cart-button">
+                        <a href="{{ route('cart.view') }}"><button class="cart-button">
                             <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
                             <span class="cart-text">Корзина</span>
                             <div class="cart-counter">0</div>
