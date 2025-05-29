@@ -111,7 +111,7 @@ export function initTextEditorPanel() {
 
     // toggle align
     window.toggleAlign = () => {
-      const modes = ['left','center','right'];
+      const modes = ['left', 'center', 'right'];
       const current = el.style.textAlign || 'left';
       const next = modes[(modes.indexOf(current) + 1) % modes.length];
       el.style.textAlign = next;
@@ -166,11 +166,15 @@ export function initTextEditorPanel() {
       const btn = panel.querySelector('#lockElement');
       const isLocked = el.classList.toggle('locked');
       if (isLocked) el.removeAttribute('draggable'), btn.textContent = '🔓';
-      else el.setAttribute('draggable','true'), btn.textContent = '🔒';
+      else el.setAttribute('draggable', 'true'), btn.textContent = '🔒';
     };
 
     // copy & delete
     window.copyElement = () => {
+
+      const el = window.selectedElement;
+      if (!el) return;
+
       const clone = el.cloneNode(true);
       const canvas = document.getElementById('canvas');
       clone.style.zIndex = (parseInt(el.style.zIndex || 1) + 1);
@@ -201,9 +205,12 @@ export function initTextEditorPanel() {
       saveState?.();
     };
   }
+  
 
   // Привязываем глобальные функции управления панелью
   window.showTextEditPanel = showTextEditPanel;
   window.hideTextEditPanel = hideTextEditPanel;
   window.rgbToHex = rgbToHex;
+
+
 }

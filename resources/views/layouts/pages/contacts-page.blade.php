@@ -12,13 +12,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/header.css'])
-    @vite(['resources/css/slider.css'])
-    @vite(['resources/css/portfolio-main.css'])
-    @vite(['resources/css/constructor-main.css'])
     @vite(['resources/css/review-main.css'])
     @vite(['resources/css/contacts-main.css'])
     @vite(['resources/css/footer.css'])
     <title>Главная страница</title>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="m-0 bg-[#2C3E50] font-montserrat">
@@ -108,6 +107,32 @@
     </div>
 
     @include('page-elements.footer')
+
+    <script>
+        // Отправка формы обратной связи (если она есть на странице)
+        document.getElementById('feedbackForm')?.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            try {
+                const res = await fetch("{{ route('feedback.store') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+                alert(data.message);
+                this.reset();
+                document.getElementById('feedbackModal')?.style?.setProperty('display', 'none');
+            } catch (error) {
+                alert('Ошибка при отправке формы.');
+            }
+        });
+    </script>
+
 </body>
 
 </html>

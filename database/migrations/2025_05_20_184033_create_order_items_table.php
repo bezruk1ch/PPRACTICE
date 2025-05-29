@@ -19,6 +19,8 @@ return new class extends Migration
             $table->json('parameters'); // Доп. параметры в JSON
             $table->integer('quantity');
             $table->decimal('price_per_item', 10, 2);
+            $table->json('project_data')->nullable();
+            $table->text('preview_image')->nullable();
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@
     /* Центрируем содержимое по вертикали */
     justify-content: center;
     /* Центрируем содержимое по горизонтали */
+    height: auto;
 }
 
 /* Изображение на задний фон */
@@ -107,4 +108,53 @@
 .design-button:hover {
     background-color: #c0392b;
     /* Изменение цвета при наведении */
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .design-title {
+        font-size: 36px;
+    }
+
+    .design-description {
+        font-size: 20px;
+    }
+
+    .design-button {
+        font-size: 28px;
+        width: 300px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .design-title {
+        font-size: 28px;
+    }
+
+    .design-description {
+        font-size: 18px;
+    }
+
+    .design-button {
+        font-size: 24px;
+        width: 260px;
+        height: 90px;
+    }
+}
+
+@media (max-width: 480px) {
+    .design-title {
+        font-size: 22px;
+    }
+
+    .design-description {
+        font-size: 16px;
+    }
+
+    .design-button {
+        font-size: 20px;
+        width: 220px;
+        height: 80px;
+    }
 }

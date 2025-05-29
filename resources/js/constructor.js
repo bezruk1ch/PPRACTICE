@@ -17,9 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentZIndex = 1;
     */
 
-    
 
-    
+
     function handleMouseUp(e) {
         const didDragOrResize = !!draggedElement || resizing;
 
@@ -119,10 +118,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === ОЧИСТКА ХОЛСТА ===
     window.clearCanvas = function () {
-        document.querySelectorAll('#canvas .draggable').forEach(el => el.remove());
+        const canvas = document.getElementById('canvas');
 
+        // Удаляем все элементы с классом draggable
+        canvas.querySelectorAll('.draggable').forEach(el => el.remove());
 
+        // Сброс фона холста
+        canvas.style.backgroundImage = 'none';
+        canvas.style.backgroundColor = 'transparent';
+
+        // Снимаем выделение с объектов
+        document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+
+        // Сброс переменных выбранного элемента, если используются
+        window.selectedElement = null;
+        window.editingTextElement = null;
+
+        // Сброс панели редактирования
+        if (typeof window.showEditor === 'function') {
+            window.showEditor('default');
+        }
     };
+
+
 
     // === СОХРАНЕНИЕ МАКЕТА ===
     window.saveDesign = function () {
@@ -142,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Макет сохранён в консоль (пока для теста)');
     };
 
-    
+
     // === ДОБАВЛЕНИЕ ТЕКСТА ===
     window.addText = function (type) {
         const newText = document.createElement('div');
@@ -193,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newText.addEventListener('keydown', e => {
             if (e.key === 'Escape') newText.blur();
         });
-    }; 
+    };
 
     // === УТИЛИТЫ ===
     function selectAllText(el) {
@@ -204,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sel.addRange(range);
     }
 
-    
+
     function applyTextStyle(el, type) {
         switch (type) {
             case 'heading':
@@ -228,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             default: return 'Введите текст';
         }
     }
-        
+
 
     // 1) вычисление minWidth
     function computeMinWidth(el) {
@@ -456,6 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+
 
 });
 

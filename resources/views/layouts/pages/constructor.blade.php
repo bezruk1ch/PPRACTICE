@@ -7,13 +7,18 @@
     <title>Конструктор визиток</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/constructor.css'])
+
     @vite(['resources/js/constructor.js'])
 
     @vite(['resources/js/constructor/index.js'])
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&family=Oswald:wght@200;400;600&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
+
+
 
     <!-- 1) Фиксированная верхняя глобальная -->
     <header class="top-bar">
@@ -63,6 +68,8 @@
                     <input type="color" class="color-picker" value="#ffffff">
                     <button class="tool-btn">Загрузить с компьютера</button>
                     <input type="file" accept="image/*" class="upload-input">
+                    <button id="addBgByUrlBtn" class="tool-btn">Добавить по ссылке</button>
+                    <input type="text" id="bgUrlInput" placeholder="https://example.com/image.jpg" class="text-input" style="margin-top: 5px; width: 100%;">
                 </div>
             </div>
 
@@ -70,13 +77,14 @@
             <div id="images-options" class="toolbox-section" style="display: none;">
                 <h3 class="section-title">Картинки</h3>
                 <div class="section-group">
-                    <button class="tool-btn">Загрузить с компьютера</button>
-                    <input type="file" accept="image/*" class="upload-input">
+                    <button type="button" class="tool-btn" data-action="upload">Загрузить с компьютера</button>
+                    <input type="file" accept="image/*" class="upload-input" style="display: none;">
 
-                    <button id="addByUrlBtn" class="tool-btn">Добавить по ссылке</button>
-                    <input type="text" id="urlInput" placeholder="https://..." class="text-input">
+                    <button type="button" class="tool-btn" data-action="by-url">Добавить по ссылке</button>
+                    <input type="text" placeholder="https://..." class="text-input">
                 </div>
             </div>
+
 
             <!-- Элементы -->
             <div id="elements-options" class="toolbox-section" style="display: none;">
@@ -96,7 +104,7 @@
                         data-product-type="{{ $product->type }}"
                         data-template-width="{{ $product->template_width }}"
                         data-template-height="{{ $product->template_height }}"
-                        data-template-image="{{ asset('storage/' . $product->template_image) }}">
+                        data-template-image="{{ $product->template_image ? asset($product->template_image) : '' }}">
                         {{ $product->type }}
                     </button>
                     @endforeach
@@ -104,6 +112,23 @@
             </div>
         </aside>
 
+        <!-- Модальное окно выбора основы -->
+        <div id="templateModal" class="preview-modal" style="display: none;">
+            <div class="preview-content">
+                <h2 class="preview-title">Выберите основу</h2>
+                <div class="preview-buttons">
+                    @foreach($products as $product)
+                    <button class="btn preview-btn select-template-btn"
+                        data-product-type="{{ $product->type }}"
+                        data-template-width="{{ $product->template_width }}"
+                        data-template-height="{{ $product->template_height }}"
+                        data-template-image="{{ $product->template_image ? asset($product->template_image) : '' }}">
+                        {{ $product->type }}
+                    </button>
+                    @endforeach
+                </div>
+            </div>
+        </div>
 
         <div class="editor-bar-canvas">
 
@@ -119,7 +144,7 @@
                     <!-- Кнопки над холстом -->
                     <div class="canvas-controls-top">
                         <button id="copySideBtn" class="side-btn">Скопировать сторону</button>
-                        <button id="clearSideBtn" class="side-btn">Очистить сторону</button>
+                        <button id="clearSideBtn" class="side-btn" onclick="clearCanvas()">Очистить сторону</button>
                     </div>
 
                     <!-- Сам холст -->
@@ -249,6 +274,8 @@
         </div>
     </template>
 
+
+
     <!-- всплывающее окно проверки макета -->
     <div id="preview-modal" class="preview-modal">
         <div class="preview-content">
@@ -273,17 +300,21 @@
     <div id="projectNameModal" class="preview-modal" style="display: none;">
         <div class="preview-content">
             <h2 class="preview-title">Название проекта</h2>
+
             <div class="project-name-input">
-                <input type="text" id="projectNameInput" placeholder="Без названия">
+                <input type="text" id="projectNameInput" placeholder="Без названия" class="preview-input" />
                 <small>Оставьте поле пустым для значения по умолчанию</small>
             </div>
+
             <div class="preview-buttons">
                 <button class="btn preview-btn confirm-btn">Подтвердить</button>
                 <button class="btn preview-btn cancel-btn">Отмена</button>
             </div>
+
             <button class="modal-close close-project-modal">×</button>
         </div>
     </div>
+
 
     <div class="zoom-controls">
         <button id="zoomOutBtn">−</button>
@@ -302,6 +333,9 @@
             <button id="closeDownloadModal" class="modal-close">×</button>
         </div>
     </div>
+
+
+
 </body>
 
 </html>

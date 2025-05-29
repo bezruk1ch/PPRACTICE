@@ -1,10 +1,12 @@
 /* Общие стили для секций */
 .section {
     background-color: #212A33;
-    width: 1280px;
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 30px 0;
+    padding: 30px 20px;
     color: white;
+    box-sizing: border-box;
 }
 
 .section-container {
@@ -31,66 +33,185 @@
 }
 
 /* Блоки с годами */
-.year-box {
-    display: inline-block;
-    background-color: #E74C3C; /* Цвет фона */
-    border-radius: 15px; /* Радиус закругления */
-    padding: 5px 15px; /* Отступы */
-    font-size: 20px; /* Размер шрифта */
-    color: white; /* Цвет текста */
-}
-
+/* Блоки с годами */
+.year-box,
 .year-box-2 {
     display: inline-block;
-    background-color: #E74C3C; /* Цвет фона */
-    border-radius: 15px; /* Радиус закругления */
-    padding: 5px 15px; /* Отступы */
-    font-size: 20px; /* Размер шрифта */
-    color: white; /* Цвет текста */
-    margin-left: auto; /* Отодвигает year-box вправо */
+    background-color: #E74C3C;
+    border-radius: 15px;
+    padding: 5px 15px;
+    font-size: 20px;
+    color: white;
 }
 
 /* Подразделы с flexbox выравниванием */
 .subsection-1,
 .subsection-2,
 .subsection-3 {
-    display: flex; /* Используем flexbox для выравнивания */
-    align-items: center; /* Вертикальное выравнивание по центру */
-    justify-content: space-between; /* Распределяем пространство между элементами */
-    margin-top: 30px; /* Отступ сверху */
+    display: flex;
+    /* Используем flexbox для выравнивания */
+    align-items: center;
+    /* Вертикальное выравнивание по центру */
+    justify-content: space-between;
+    /* Распределяем пространство между элементами */
+    margin-top: 30px;
+    /* Отступ сверху */
+}
+
+
+.year-box-2 {
+    margin-left: auto;
 }
 
 /* Текстовые блоки */
+.text-content,
+.text-content-2 {
+    max-width: 798px;
+    text-align: justify;
+    margin-top: 5px;
+}
+
 .text-content {
-    max-width: 798px; /* Максимальная ширина текста */
-    text-align: justify; /* Выравнивание текста по ширине */
-    margin-left: 30px; /* Отступ слева */
-    margin-top: 5px; 
+    margin-left: 30px;
 }
 
 .text-content-2 {
-    max-width: 790px; /* Максимальная ширина текста (можно изменить) */
-    text-align: justify; /* Выравнивание текста по ширине */
-    margin-top: 5px; 
-    margin-right: 30px; /* Отступ справа для второго текстового блока */
+    margin-right: 30px;
 }
 
 /* Блоки с текстом и изображениями в колонках */
-.box-text-2 {
+.box-text-2,
+.box-text-3 {
     display: flex;
-    flex-direction: column; /* Вертикальное расположение элементов */
+    flex-direction: column;
 }
 
 /* Подразделение с рамкой и центровкой текста */
 .subsection-4 {
-    text-align: center; /* Вертикальное выравнивание по центру */
-    margin-top: 30px; /* Отступ сверху */
-    
-   padding :30px 39px ;
-   border: 2px solid red ;
-   border-radius: 15px ;
+    text-align: center;
+    /* Вертикальное выравнивание по центру */
+    margin-top: 30px;
+    /* Отступ сверху */
+
+    padding: 30px 39px;
+    border: 2px solid red;
+    border-radius: 15px;
 }
 
-.image-content-2{
+.image-content-2 {
     margin-top: 40px;
+}
+
+/* Подразделы с flexbox выравниванием */
+.subsection-1,
+.subsection-2,
+.subsection-3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+/* Подразделение с рамкой и центровкой текста */
+.subsection-4 {
+    text-align: center;
+    margin-top: 30px;
+    padding: 30px 20px;
+    border: 2px solid red;
+    border-radius: 15px;
+}
+
+/* Изображения */
+.image-content-1,
+.image-content-2,
+.image-content-3 {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.box-text-3 .year-box {
+    align-self: flex-start; /* чтобы блок не растягивался */
+    width: fit-content;     /* чтобы ширина соответствовала содержимому */
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .section-title {
+        font-size: 36px;
+    }
+
+    .subsection-title {
+        font-size: 20px;
+    }
+
+    .text-content,
+    .text-content-2 {
+        font-size: 18px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .subsection-1,
+    .subsection-2,
+    .subsection-3 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .text-content,
+    .text-content-2 {
+        margin: 0;
+    }
+
+    .year-box,
+    .year-box-2 {
+        align-self: center;
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+
+    .subsection-title {
+        font-size: 18px;
+    }
+
+    .section-container {
+        font-size: 16px;
+    }
+
+    .subsection-4 {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 24px;
+    }
+
+    .subsection-title {
+        font-size: 16px;
+    }
+
+    .section-container {
+        font-size: 14px;
+    }
+
+    .year-box,
+    .year-box-2 {
+        font-size: 16px;
+        padding: 4px 10px;
+    }
+
+    .subsection-4 {
+        font-size: 14px;
+        padding: 20px 15px;
+    }
 }

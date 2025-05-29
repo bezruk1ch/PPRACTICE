@@ -38,9 +38,13 @@
             <div class="portfolio-items">
                 @foreach ($portfolios as $portfolio)
                 <div class="portfolio-item">
-                    <img src="{{ asset($portfolio->image) }}" alt="{{ $portfolio->title }}" class="portfolio-image">
+                    <div class="portfolio-image-wrapper">
+                        <img src="{{ asset($portfolio->image) }}" alt="{{ $portfolio->title }}" class="portfolio-image">
+                        <button class="portfolio-more-btn" onclick="openModal({{ $portfolio->id }})">Подробнее</button>
+                    </div>
                     <p class="portfolio-text">{!! nl2br(e($portfolio->title)) !!}</p>
                 </div>
+
                 @endforeach
             </div>
 
@@ -53,6 +57,37 @@
     </section>
 
     @include('page-elements.footer')
+
+    @foreach ($portfolios as $portfolio)
+    <div id="modal-{{ $portfolio->id }}" class="portfolio-modal hidden">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal({{ $portfolio->id }})">&times;</span>
+            <img src="{{ asset($portfolio->image) }}" alt="{{ $portfolio->title }}" class="modal-image">
+            <h3>{!! nl2br(e($portfolio->title)) !!}</h3>
+            <p class="modal-description">{{ $portfolio->description }}</p>
+            <p class="modal-tags">{{ $portfolio->tags }}</p>
+        </div>
+    </div>
+    @endforeach
+    <script>
+        function openModal(id) {
+            document.getElementById('modal-' + id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById('modal-' + id).classList.add('hidden');
+        }
+
+        // Закрытие модального окна при клике вне него
+        document.addEventListener('click', function(e) {
+            document.querySelectorAll('.portfolio-modal').forEach(modal => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

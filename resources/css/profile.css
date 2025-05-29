@@ -158,3 +158,35 @@
     background-color: #c0392b;
     transform: translateY(-2px);
 }
+
+.orders-section {
+    background-color: #2f3e47;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.order-block {
+    background-color: #34495e;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #ecf0f1;
+}
+
+.order-block p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.order-block ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.order-block li {
+    margin-bottom: 10px;
+    font-size: 15px;
+    line-height: 1.4;
+}

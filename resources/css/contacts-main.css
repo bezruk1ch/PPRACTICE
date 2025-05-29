@@ -33,7 +33,8 @@
     margin: 30px auto 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 40px;
 }
 
 .contacts-info {
@@ -197,4 +198,64 @@
 
 .feedback-content {
     animation: fadeIn 0.3s ease-out;
+}
+
+/* --- Адаптив --- */
+@media (max-width: 1280px) {
+    .contacts-section {
+        width: 95%;
+    }
+
+    .contacts-container {
+        width: 100%;
+        margin: 30px auto 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .contacts-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+    }
+
+    .contacts-info {
+        font-size: 20px;
+    }
+
+    .contacts-map iframe {
+        width: 100% !important;
+        height: 300px !important;
+    }
+
+    .map-caption {
+        max-width: 100%;
+        font-size: 16px;
+    }
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .contacts-container {
+        flex-direction: column;
+        align-items: center;
+        /* Центрируем содержимое по горизонтали */
+        text-align: center;
+        /* Центрируем текст внутри */
+    }
+
+    .contacts-info,
+    .contacts-map {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .contacts-map iframe {
+        width: 100% !important;
+        height: auto;
+    }
+
+    .map-caption {
+        max-width: 500px;
+    }
 }

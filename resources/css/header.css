@@ -25,19 +25,19 @@
     text-align: center;
 }
 
-/* Бургерное меню */
+/* Стилизация бургер-иконки */
 .burger-menu {
     display: none;
-    /* Скрыто на десктопах */
     background: none;
     border: none;
-    color: white;
     cursor: pointer;
+    padding: 10px;
 }
 
 .burger-icon {
     width: 32px;
     height: 32px;
+    stroke: white;
 }
 
 /* Правая часть шапки */
@@ -52,30 +52,25 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    flex-wrap: wrap;
 }
 
-
-/* Кнопка звонка */
-.call-button {
+.call-button,
+.user-button {
+    display: flex;
+    align-items: center;
     background-color: #E74C3C;
     color: white;
     border-radius: 15px;
-    height: 39px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 15px;
+    padding: 10px 15px;
     cursor: pointer;
-    white-space: nowrap;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Эффект при наведении */
-.call-button:hover {
+.call-button:hover,
+.user-button:hover {
     background-color: #c0392b;
     transform: translateY(-4px);
-    /* Легкое поднимание кнопки */
 }
 
 /* Иконка звонка */
@@ -107,15 +102,13 @@
     gap: 15px;
 }
 
-/* Стили кнопок соцсетей */
 .social-button {
     background: none;
     border: none;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Стили иконок соцсетей */
 .social-icon {
     width: 39px;
     height: 39px;
@@ -123,42 +116,14 @@
     transition: transform 0.3s ease;
 }
 
-/* Эффект увеличения при наведении */
 .social-button:hover .social-icon {
     transform: scale(1.1);
 }
 
-/* Плавное увеличение кнопки при наведении */
 .social-button:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Добавление цвета при наведении (опционально) */
-.social-button:hover {
     color: #E74C3C;
-}
-
-
-/* Кнопка пользователя */
-.user-button {
-    background-color: #E74C3C;
-    color: white;
-    border-radius: 15px;
-    height: 39px;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-/* Эффект при наведении */
-.user-button:hover {
-    background-color: #c0392b;
-    transform: translateY(-4px);
-    /* Легкое поднимание кнопки */
 }
 
 /* Иконка пользователя */
@@ -190,36 +155,47 @@
     width: 100%;
     max-width: 1280px;
     /* Ограничиваем ширину как в container */
+    display: flex;
+    justify-content: center;
+    /* Центрируем по горизонтали */
+    align-items: center;
+    /* Центрируем по вертикали */
+    height: 100%;
+    /* Занять всю высоту контейнера */
+    gap: 10px;
 }
 
 .menu-buttons {
     display: flex;
-    justify-content: space-between;
-    /* Основное изменение */
     align-items: center;
-    flex-grow: 1;
-    /* Занимает доступное пространство */
+    gap: 10px;
+    /* отступы между кнопками */
+}
+
+.menu-buttons>a {
+    margin-right: 10px;
+}
+
+.menu-buttons>a:last-child {
+    margin-right: 0;
 }
 
 .menu-button {
     background: none;
+    border: none;
     color: #E74C3C;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    border: none;
-    border-radius: 0;
-    padding: 8px 16px;
-    cursor: pointer;
-    white-space: nowrap;
     font-size: 16px;
-    height: 64px;
-    transition: color 0.3s ease;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .menu-button:hover {
-    color: white;
-    background: none;
+    color: #ffffff;
 }
+
 
 /* Кнопка корзины (исходный стиль) */
 .cart-button {
@@ -231,7 +207,9 @@
     align-items: center;
     cursor: pointer;
     position: relative;
-    height: 64px;
+    height: 48px;
+    /* уменьшил высоту */
+    padding: 6px 16px;
 }
 
 .cart-icon {
@@ -263,58 +241,118 @@
     right: -10px;
 }
 
-/* Адаптивность */
-@media (max-width: 1024px) {
-    .menu-buttons {
+
+
+/* Стилизация мобильного меню */
+.mobile-menu {
+    display: flex;
+    /* или block, чтобы меню показывалось */
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 250px;
+    height: 100%;
+    background-color: #2C3E50;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding-top: 60px;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.mobile-menu.active {
+    right: 0;
+    /* Показываем меню, сдвигая его вправо */
+}
+
+.mobile-menu.hidden {
+    display: none;
+    /* Убрать это правило или не использовать класс hidden */
+}
+
+
+@media (max-width: 768px) {
+
+    /* Вся шапка в столбик */
+    .header .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 15px;
+    }
+
+    /* Логотип сверху, без margin-right */
+    .logo {
+        margin: 0 0 10px 0;
+        flex-shrink: 0;
+        align-items: center;
+    }
+
+    /* Верхняя часть шапки */
+    .header-top {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* Кнопки звонка и пользователя — ограничиваем ширину */
+    .call-button,
+    .user-button {
+        width: auto;
+        /* убрать растягивание */
+        max-width: 300px;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    /* Соцсети по центру */
+    .social-icons {
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    /* Скрываем основное меню, показываем бургер */
+    .header-nav {
+        display: none;
+    }
+
+    .burger-menu {
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 1100;
+    }
+
+    /* Мобильное меню */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 250px;
+        height: 100%;
+        background-color: #2C3E50;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        padding-top: 60px;
+    }
+
+    .mobile-menu.active {
+        right: 0;
+    }
+
+    .mobile-menu .menu-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 0 20px;
     }
 
     .menu-button,
     .cart-button {
-        padding: 6px 12px;
-        height: 54px;
-    }
-
-    .cart-icon {
-        width: 32px;
-        height: 32px;
-    }
-
-    .cart-text {
-        font-size: 16px;
-    }
-
-    .cart-counter {
-        width: 25px;
-        height: 25px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 768px) {
-    .header-nav {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .menu-buttons {
-        flex-wrap: wrap;
+        width: 100%;
         justify-content: center;
-        gap: 8px;
-    }
-
-    .menu-button {
-        font-size: 14px;
-        padding: 4px 10px;
-        height: 44px;
-    }
-
-    .cart-button {
-        margin-top: 5px;
-        height: 44px;
-    }
-
-    .cart-text {
-        font-size: 14px;
     }
 }

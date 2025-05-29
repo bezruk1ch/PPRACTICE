@@ -81,29 +81,48 @@
 
             <div class="orders-section">
                 <h3>Текущие заказы</h3>
-                <ul>
-                    @forelse($currentOrders as $order)
-                    <li>
-                        <strong>Вид товара:</strong> {{ $order->product_type }} <br>
-                        <strong>Количество:</strong> {{ $order->quantity }} <br>
-                        <strong>Сумма:</strong> {{ number_format($order->quantity * $order->price, 2) }} <br>
-                        <strong>Статус:</strong> {{ $order->status }}
-                    </li>
-                    @empty
-                    <li>Нет активных заказов.</li>
-                    @endforelse
-                </ul>
+                @forelse ($currentOrders as $order)
+                <div class="order-block">
+                    <p><strong>Номер заказа:</strong> {{ $order->id }}</p>
+                    <p><strong>Статус:</strong> {{ $order->status }}</p>
+                    <p><strong>Сумма:</strong> {{ number_format($order->total_price, 2) }} руб.</p>
+                    <ul>
+                        @foreach ($order->items as $item)
+                        <li>
+                            <strong>{{ $item->project_name }}</strong><br>
+                            Тип: {{ $item->product_type }}<br>
+                            Кол-во: {{ $item->quantity }}<br>
+                            Цена за шт.: {{ $item->price_per_item }} руб.
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                @empty
+                <p>У вас нет текущих заказов.</p>
+                @endforelse
             </div>
 
             <div class="orders-section">
                 <h3>История заказов</h3>
-                <ul>
-                    @forelse($pastOrders as $order)
-                    <li>{{ $order->title }} - {{ $order->status }}</li>
-                    @empty
-                    <li>История заказов пуста.</li>
-                    @endforelse
-                </ul>
+                @forelse ($pastOrders as $order)
+                <div class="order-block">
+                    <p><strong>Номер заказа:</strong> {{ $order->id }}</p>
+                    <p><strong>Статус:</strong> {{ $order->status }}</p>
+                    <p><strong>Сумма:</strong> {{ number_format($order->total_price, 2) }} руб.</p>
+                    <ul>
+                        @foreach ($order->items as $item)
+                        <li>
+                            <strong>{{ $item->project_name }}</strong><br>
+                            Тип: {{ $item->product_type }}<br>
+                            Кол-во: {{ $item->quantity }}<br>
+                            Цена за шт.: {{ $item->price_per_item }} руб.
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                @empty
+                <p>У вас нет завершённых заказов.</p>
+                @endforelse
             </div>
 
             <div class="review-form" id="leave-review-section">

@@ -19,10 +19,14 @@ class ConstructorController extends Controller
         // Получаем все продукты из базы данных
         $products = Product::all();
 
+        // Находим продукт "Стандартная визитка"
+        $defaultProduct = Product::where('name', 'Стандартная визитка')->first();
+
         // Передаем данные в представление
         return view('layouts.pages.constructor', [
             'user' => $user,
-            'products' => $products
+            'products' => $products,
+            'defaultProduct' => $defaultProduct, // добавили
         ]);
     }
 }

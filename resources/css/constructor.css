@@ -407,12 +407,12 @@ body {
 
 /* Холст */
 #canvas {
-    width: 700px;
+    width: 798px;
     background: #fff;
     border-radius: 8px;
     border: 2px solid #444;
     position: relative;
-    height: 400px;
+    height: 444px;
     overflow: hidden;
     margin: auto;
 }
@@ -519,7 +519,15 @@ body {
     position: absolute;
 }
 
-
+.booklet-guide {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    border-left: 1px dashed #888;
+    pointer-events: none;
+    z-index: 500;
+}
 
 /* Линии безопасности */
 .safety-lines {
@@ -534,30 +542,30 @@ body {
 }
 
 .safety-line.top {
-    top: 10px;
-    left: 10px;
-    right: 10px;
+    top: 20px;
+    left: 20px;
+    right: 20px;
     height: 0;
 }
 
 .safety-line.bottom {
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
     height: 0;
 }
 
 .safety-line.left {
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
+    top: 20px;
+    bottom: 20px;
+    left: 20px;
     width: 0;
 }
 
 .safety-line.right {
-    top: 10px;
-    bottom: 10px;
-    right: 10px;
+    top: 20px;
+    bottom: 20px;
+    right: 20px;
     width: 0;
 }
 
@@ -940,6 +948,33 @@ body {
     background: none;
     border: none;
     cursor: pointer;
+}
+
+.project-name-input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.preview-input {
+    padding: 10px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    width: 100%;
+    transition: border 0.2s ease;
+}
+
+.preview-input:focus {
+    border-color: #444;
+}
+
+.project-name-input small {
+    font-size: 12px;
+    color: #777;
 }
 
 /* Базовые стили холста */

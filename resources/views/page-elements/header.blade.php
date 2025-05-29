@@ -13,6 +13,7 @@
             </svg>
         </button>
 
+
         <!-- Правая часть шапки -->
         <div class="header-right">
             <!-- Верхняя часть шапки -->
@@ -53,31 +54,45 @@
                 <nav class="header-nav">
                     <!-- Кнопки меню -->
                     <div class="menu-buttons">
-                    <a href="{{ route('constructor') }}"><button class="menu-button">Конструктор заказов</button></a>
+                        <a href="{{ route('constructor') }}"><button class="menu-button">Конструктор заказов</button></a>
                         <a href="{{ route('portfolio') }}"><button class="menu-button">Портфолио</button></a>
                         <a href="{{ route('about') }}"><button class="menu-button">О нас</button></a>
                         <a href="{{ route('contacts') }}"><button class="menu-button">Контакты</button></a>
                         <a href="{{ route('reviews') }}"><button class="menu-button">Отзывы</button></a>
                         <!-- Кнопка корзины -->
-                        <a href="{{ route('cart.view') }}"><button class="cart-button">
-                            <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
-                            <span class="cart-text">Корзина</span>
-                            <div class="cart-counter">0</div>
-                        </button></a>
+                        <a href="{{ route('cart') }}"><button class="cart-button">
+                                <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
+                                <span class="cart-text">Корзина</span>
+                                <div class="cart-counter">{{ $cartItemCount }}</div>
+                            </button></a>
                     </div>
                 </nav>
             </div>
         </div>
-    </div>
-
-    <!-- Мобильное меню (появляется при клике на бургер) -->
-    <div id="mobile-menu" class="mobile-menu hidden">
-        <nav class="mobile-nav">
-            <button class="mobile-menu-button">Конструктор заказов</button>
-            <button class="mobile-menu-button">Портфолио</button>
-            <button class="mobile-menu-button">О нас</button>
-            <button class="mobile-menu-button">Контакты</button>
-            <button class="mobile-menu-button">Личный кабинет</button>
+        <!-- Мобильное меню -->
+        <nav id="mobile-menu" class="mobile-menu">
+            <div class="menu-buttons">
+                <a href="{{ route('constructor') }}"><button class="menu-button">Конструктор заказов</button></a>
+                <a href="{{ route('portfolio') }}"><button class="menu-button">Портфолио</button></a>
+                <a href="{{ route('about') }}"><button class="menu-button">О нас</button></a>
+                <a href="{{ route('contacts') }}"><button class="menu-button">Контакты</button></a>
+                <a href="{{ route('reviews') }}"><button class="menu-button">Отзывы</button></a>
+                <a href="{{ route('cart') }}"><button class="cart-button">
+                        <img src="{{ asset('img/header/basket.png') }}" alt="Корзина" class="cart-icon">
+                        <span class="cart-text">Корзина</span>
+                        <div class="cart-counter">0</div>
+                    </button></a>
+            </div>
         </nav>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const burger = document.getElementById('burger-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            burger.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+            });
+        });
+    </script>
 </header>

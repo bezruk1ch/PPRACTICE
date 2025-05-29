@@ -1,3 +1,4 @@
+
 <header class="header">
     <div class="container">
         <!-- Логотип -->
@@ -5,13 +6,6 @@
             <a href="{{ route('home') }}"><img src="{{ asset('img/header/logo.png') }}" alt="Логотип" class="logo-img"></a>
             <div class="logo-text">А ПЛЮС</div>
         </div>
-
-        <!-- Бургерное меню (видно только на мобильных) -->
-        <button id="burger-menu" class="burger-menu">
-            <svg class="burger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-            </svg>
-        </button>
 
         <!-- Правая часть шапки -->
         <div class="header-right">
@@ -48,17 +42,6 @@
 
 
         </div>
-    </div>
-
-    <!-- Мобильное меню (появляется при клике на бургер) -->
-    <div id="mobile-menu" class="mobile-menu hidden">
-        <nav class="mobile-nav">
-            <button class="mobile-menu-button">Конструктор заказов</button>
-            <button class="mobile-menu-button">Портфолио</button>
-            <button class="mobile-menu-button">О нас</button>
-            <button class="mobile-menu-button">Контакты</button>
-            <button class="mobile-menu-button">Личный кабинет</button>
-        </nav>
     </div>
 
     <!-- Модальное окно для подписки -->

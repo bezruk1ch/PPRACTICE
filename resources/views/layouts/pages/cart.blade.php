@@ -2,93 +2,119 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Корзина</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/header.css'])
     @vite(['resources/css/cart.css'])
     @vite(['resources/css/footer.css'])
-
+    @vite(['resources/js/cart.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="m-0 bg-[#2C3E50] font-montserrat">
     @include('page-elements.header')
 
-    <section class="profile-section">
-        <div class="container-profile">
-            <h2 class="profile-title">Ваша корзина</h2>
+    @php
+    $optionLabels = [
+    'size' => 'Размер',
+    'color' => 'Цвет',
+    'print_type' => 'Тип печати',
+    'paper_quality' => 'Качество бумаги',
+    'lamination' => 'Ламинация',
+    'material' => 'Материал',
+    'pages' => 'Страницы',
+    'binding' => 'Переплёт',
+    ];
+    @endphp
 
-            {{-- Пустая корзина --}}
-            <div id="cart-empty" class="text-center py-16" style="display: none;">
-                <p>Ваша корзина пуста.</p>
-                <a href="{{ route('home') }}" class="save-btn mt-4 inline-block">Перейти в каталог</a>
+    <section class="cart-section">
+        <h1 class="cart-title">Корзина</h1>
+
+        @if(!empty($cart))
+        <div class="cart-list">
+            @foreach($cart as $i => $item)
+            @php
+            $product = $products->firstWhere('type', $item['template']['type']);
+            $groups = $product
+            ? $product->options->groupBy('option_type')
+            : collect();
+            @endphp
+
+            <div class="cart-item">
+
+                {{-- 1: Левая колонка --}}
+                <div class="col col-left">
+                    <p><strong>Название:</strong> {{ $item['name'] }}</p>
+                    <p><strong>Тип:</strong> {{ $item['template']['type'] ?? '—' }}</p>
+                    <p><strong>Дата:</strong> {{ $item['date'] }}</p>
+                    @if(!empty($item['preview']))
+                    <img src="{{ $item['preview'] }}" alt="Preview" class="cart-preview">
+                    @endif
+                </div>
+
+                {{-- 2: Средняя колонка --}}
+                <div class="col col-middle">
+                    @foreach($groups as $type => $opts)
+                    <label class="param-label">
+                        {{ $optionLabels[$type] ?? ucfirst($type) }}:
+                        <select name="items[{{ $i }}][options][{{ $type }}]" class="param-select" data-base="{{ $product->base_price }}">
+                            @foreach($opts as $opt)
+                            <option value="{{ $opt->option_name }}" data-modifier="{{ $opt->price_modifier }}">
+                                {{ $opt->option_name }} (+{{ $opt->price_modifier }})
+                            </option>
+                            @endforeach
+                        </select>
+                    </label>
+                    @endforeach
+
+                    <label class="param-label">
+                        Кол-во:
+                        <input type="number" name="items[{{ $i }}][quantity]" class="qty-input" value="1" min="1">
+                    </label>
+                </div>
+
+                {{-- 3: Правая колонка --}}
+                <div class="col col-right">
+                    <p>Цена за шт.:<br>
+                        <span class="price-per-item">0</span> ₽
+                    </p>
+                    <p>Всего:<br>
+                        <span class="total-price">0</span> ₽
+                    </p>
+                </div>
+
             </div>
-
-            {{-- Основной контент --}}
-            <div id="cart-content">
-                <form action="{{ route('cart.checkout') }}" method="POST" id="checkoutForm">
-                    @csrf
-
-                    {{-- 1) Опции макета --}}
-                    <div class="order-options mb-6">
-                        <h3 class="options-title">Параметры макета</h3>
-                        <div class="options-row">
-                            <label>
-                                Качество бумаги:
-                                <select name="paperQuality" id="paperQuality" class="option-select">
-                                    <option value="standard">Стандарт (130 г/м²)</option>
-                                    <option value="premium">Премиум (200 г/м²)</option>
-                                    <option value="deluxe">Делюкс (300 г/м²)</option>
-                                </select>
-                            </label>
-                            <label>
-                                Ламинация:
-                                <select name="lamination" id="lamination" class="option-select">
-                                    <option value="none">Без ламинации</option>
-                                    <option value="matte">Матовая</option>
-                                    <option value="gloss">Глянцевая</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-
-                    {{-- 3) Таблица корзины --}}
-                    <table class="cart-table mb-6">
-                        <thead>
-                            <tr>
-                                <th>Товар</th>
-                                <th>Цена</th>
-                                <th>Кол-во</th>
-                                <th>Сумма</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="cart-items">
-                            {{-- JS или серверный рендер вставит строки --}}
-                        </tbody>
-                    </table>
-
-                    {{-- 4) Итоги и кнопки --}}
-                    <div class="cart-summary">
-                        <div class="total">
-                            <span>Итого:</span>
-                            <span id="cart-total">0 ₽</span>
-                        </div>
-                        <div class="cart-actions">
-                            <button type="button" id="clearCartBtn" class="side-btn">Очистить корзину</button>
-                            <button type="submit" class="save-btn">Оформить заказ</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
+            @endforeach
         </div>
+
+        <div class="cart-footer">
+            {{-- Вернуться на главную --}}
+            <a href="{{ url('/') }}" class="btn-back">Вернуться на главную</a>
+
+            {{-- Оформить заказ --}}
+            <form action="{{ route('cart.checkout') }}" method="POST" style="display:inline-block; margin: 0 15px;">
+                @csrf
+                <button type="submit" class="btn-submit">Оформить заказ</button>
+            </form>
+
+            {{-- Очистить корзину --}}
+            <form action="{{ route('cart.clear') }}" method="POST" style="display:inline-block;">
+                @csrf
+                <button type="submit" class="btn-clear">Очистить корзину</button>
+            </form>
+        </div>
+
+        @else
+        <p class="cart-empty">Корзина пуста.</p>
+        <div class="cart-footer">
+            <a href="{{ url('/') }}" class="btn-back">Вернуться на главную</a>
+        </div>
+        @endif
     </section>
 
     @include('page-elements.footer')
-    @vite(['resources/js/cart.js'])
 </body>
 
 </html>

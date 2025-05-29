@@ -118,6 +118,25 @@
 
 
     @include('page-elements.footer')
+
+    <!-- Модальное окно -->
+    <div class="review-modal" id="reviewModal">
+        <div class="review-modal-content">
+            <span class="review-modal-close" id="reviewModalClose">&times;</span>
+            <div class="review-modal-body">
+                <div class="review-modal-avatar-rating">
+                    <img src="" alt="Аватар" class="review-modal-avatar" />
+                    <div>
+                        <div class="review-modal-name" id="reviewModalName"></div>
+                        <div class="review-modal-date" id="reviewModalDate"></div>
+                        <div class="review-modal-stars" id="reviewModalStars"></div>
+                    </div>
+                </div>
+                <p class="review-modal-text" id="reviewModalText"></p>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

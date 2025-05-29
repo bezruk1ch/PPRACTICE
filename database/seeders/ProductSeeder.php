@@ -18,8 +18,8 @@ class ProductSeeder extends Seeder
                 'name' => 'Стандартная визитка',
                 'type' => 'Визитка',
                 'base_price' => 100,
-                'template_width' => 600,
-                'template_height' => 300,
+                'template_width' => 798,
+                'template_height' => 444,
                 'template_image' => null,
                 'options' => [
                     ['paper_quality', 'Стандартная', 0],
@@ -33,8 +33,8 @@ class ProductSeeder extends Seeder
                 'name' => 'Хлопковая футболка',
                 'type' => 'Футболка',
                 'base_price' => 500,
-                'template_width' => 800,
-                'template_height' => 850,
+                'template_width' => 750,
+                'template_height' => 877,
                 'template_image' => '/img/constructor/tshirt.png',
                 'options' => [
                     ['size', 'S', 0],
@@ -50,8 +50,8 @@ class ProductSeeder extends Seeder
                 'name' => 'Плакат А3',
                 'type' => 'Постер',
                 'base_price' => 300,
-                'template_width' => 1000,
-                'template_height' => 1400,
+                'template_width' => 877,
+                'template_height' => 1240,
                 'template_image' => null,
                 'options' => [
                     ['material', 'Бумага', 0],
@@ -65,8 +65,8 @@ class ProductSeeder extends Seeder
                 'name' => 'Стандартный буклет',
                 'type' => 'Буклет',
                 'base_price' => 200,
-                'template_width' => 400,
-                'template_height' => 200,
+                'template_width' => 877,
+                'template_height' => 620,
                 'template_image' => null,
                 'options' => [
                     ['pages', '4 страницы', 0],

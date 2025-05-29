@@ -3,69 +3,64 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    // 1) Список всех пользователей
     public function index()
     {
-        $users = User::all();
+        $users = User::orderBy('created_at','desc')->paginate(15);
         return view('admin.users.index', compact('users'));
     }
 
+    // 2) Форма редактирования
     public function edit(User $user)
     {
         return view('admin.users.edit', compact('user'));
     }
 
+    // 3) Обновление данных
     public function update(Request $request, User $user)
     {
-        // Валидируем входящие данные
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'login' => 'required|string|max:255|unique:users,login,' . $user->id,
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:255',
-            'birth_date' => 'nullable|date',
-            'gender' => 'nullable|string|max:50',
+        $data = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email,'.$user->id,
+            'login'    => 'required|string|max:50|unique:users,login,'.$user->id,
+            'role'     => 'required|in:user,admin',
             'password' => 'nullable|string|min:6|confirmed',
-            'role' => 'required|string',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'is_admin' => 'nullable|boolean',
         ]);
 
-        // Обновляем данные пользователя
-        $user->name = $validated['name'];
-        $user->surname = $validated['surname'];
-        $user->middle_name = $validated['middle_name'];
-        $user->login = $validated['login'];
-        $user->email = $validated['email'];
-        $user->phone = $validated['phone'];
-        $user->birth_date = $validated['birth_date'];
-        $user->gender = $validated['gender'];
-        if ($request->filled('password')) {
-            $user->password = bcrypt($validated['password']);
-        }
-        $user->role = $validated['role'];
-        $user->is_admin = $validated['is_admin'] ?? false;
+        $user->name  = $data['name'];
+        $user->email = $data['email'];
+        $user->login = $data['login'];
+        $user->role  = $data['role'];
 
-        // Обработка загрузки фото профиля
-        if ($request->hasFile('profile_picture')) {
-            // Удаляем старое изображение, если оно существует
-            if ($user->profile_picture) {
-                unlink(storage_path('app/public/' . $user->profile_picture));
-            }
-
-            // Сохраняем новое фото
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $path;
+        if (!empty($data['password'])) {
+            $user->password = Hash::make($data['password']);
         }
 
-        $user->save(); // Сохраняем изменения
+        $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'Данные пользователя обновлены.');
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success','Пользователь обновлён.');
+    }
+
+    // 4) Удаление
+    public function destroy(User $user)
+    {
+        // нельзя удалять самого себя
+        if (auth()->id() === $user->id) {
+            return back()->with('error','Нельзя удалить свой аккаунт.');
+        }
+
+        $user->delete();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success','Пользователь удалён.');
     }
 }

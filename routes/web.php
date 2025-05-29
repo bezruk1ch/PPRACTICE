@@ -6,18 +6,24 @@ use App\Http\Controllers\ConstructorController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactsController;
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ReviewController;
 
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ReviewController;
 
-use App\Models\Template;
+
+
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\ReviewController as ReviewAdminController;
+use App\Http\Controllers\Admin\DashboardController;
+
+use App\Http\Controllers\Admin\FeedbackController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +36,50 @@ use App\Models\Template;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
-    // Корзина
-    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::post('/cart/calculate-price', [CartController::class, 'calculatePrice'])->name('cart.calculate-price');
-    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
-});
+// Админка — только для залогиненных и с ролью admin
+Route::prefix('admin')
+    ->middleware(['auth', 'can:admin'])
+    ->name('admin.')
+    ->group(function () {
+        // вместо view() → перенаправляем на контроллер или в dashboard.blade
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Список заказов
+        Route::get('orders', [AdminOrderController::class, 'index'])
+            ->name('orders');
+        // Просмотр одного заказа
+        Route::get('orders/{order}', [AdminOrderController::class, 'show'])
+            ->name('orders.show');
+        // Обновление статуса заказа
+        Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
+        Route::delete('orders/{order}', [AdminOrderController::class, 'destroy'])
+            ->name('orders.destroy');
+
+        // Пользователи
+        Route::get('users',         [AdminUserController::class, 'index'])->name('users.index');
+        Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+        Route::patch('users/{user}',   [AdminUserController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}',  [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+        Route::get('reviews', [ReviewAdminController::class, 'index'])->name('reviews.index');
+        Route::get('reviews/{review}/edit', [ReviewAdminController::class, 'edit'])->name('reviews.edit');
+        Route::put('reviews/{review}', [ReviewAdminController::class, 'update'])->name('reviews.update');
+        Route::delete('reviews/{review}', [ReviewAdminController::class, 'destroy'])->name('reviews.destroy');
+
+        Route::get('/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+    });
+
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+
+
+// Добавить в корзину — сессия
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+// Оформить заказ (запись в БД)
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+// Сброс корзины
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
 
 // Тест страница
 Route::get('/test', [TestController::class, 'index'])->name('test');
@@ -55,20 +99,11 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 // Контакты
 Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
 
-Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');  // Здесь используем POST
-});
-
-Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
-    Route::get('/reviews', [ReviewController::class, 'index'])->name('admin.reviews.index');
-});
-
 // Личный кабинет
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
 });
 
 Route::post('/profile/review', [ProfileController::class, 'storeReview'])->name('profile.review');

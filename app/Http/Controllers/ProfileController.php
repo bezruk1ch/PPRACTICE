@@ -20,11 +20,10 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        $currentOrders = [];
-        $pastOrders = [];
+        $orders = Order::with('items')->where('user_id', $user->id)->get();
 
-        // Получаем все отзывы пользователя
-        $reviews = Review::where('user_id', $user->id)->get();
+        $currentOrders = $orders->whereIn('status', ['new', 'in_progress', 'pending']);
+        $pastOrders = $orders->where('status', 'completed');
 
         return view('layouts.pages.profile', compact('user', 'currentOrders', 'pastOrders'));
     }

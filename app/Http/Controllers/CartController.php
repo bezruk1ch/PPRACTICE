@@ -1,95 +1,131 @@
 <?php
 
+// Примерная структура реализации корзины в Laravel
+
+/**
+ * Этапы реализации корзины и оформления заказа:
+ * 1. Хранение корзины (в сессии до входа, в БД после входа).
+ * 2. Интерфейс выбора параметров товара (на клиенте).
+ * 3. Расчёт стоимости (на клиенте и сервере).
+ * 4. Отправка данных на сервер (AJAX или форма).
+ * 5. Сохранение в БД в orders и order_items.
+ */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\ProductOption;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product; // ваша модель товара
-use App\Models\Order;   // модель заказа
 
 class CartController extends Controller
 {
-    public function addToCart(Request $request)
+    /**
+     * Показать содержимое корзины.
+     */
+    public function index()
     {
-        try {
-            $validated = $request->validate([
-                'base_type' => 'required|string',
-                'parameters' => 'sometimes|array'
-            ]);
-
-            $cart = session()->get('cart', []);
-
-            $item = [
-                'id' => uniqid(),
-                'project_name' => session()->get('project_name', 'Без названия'),
-                'product_type' => $validated['base_type'],
-                'parameters' => $validated['parameters'],
-                'quantity' => 1,
-                'price' => $this->calculatePrice(
-                    $validated['base_type'],
-                    $validated['parameters']
-                )
-            ];
-
-            session()->put('cart', [...$cart, $item]);
-
-            return redirect()->route('cart.view');
-        } catch (\Exception $e) {
-            // Логирование ошибки
-            \Log::error('Ошибка добавления в корзину: ' . $e->getMessage());
-
-            return back()->withErrors('Произошла ошибка: ' . $e->getMessage());
-        }
+        $cart     = session()->get('cart', []);
+        $products = Product::with('options')->get();
+        return view('layouts.pages.cart', compact('cart', 'products'));
     }
 
-    public function calculatePrice(Request $request)
+    /**
+     * Добавить проект в корзину (в сессию).
+     * Ожидает JSON:
+     *  - project_name
+     *  - project_data (строка JSON с ключами template, preview, date)
+     */
+    public function add(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'product_type' => 'required|string|exists:products,type',
-                'selected_options' => 'required|array'
-            ]);
+        $data = $request->validate([
+            'project_name' => 'required|string|max:255',
+            'project_data' => 'required|string',
+        ]);
 
-            $price = $this->calculateItemPrice(
-                $validated['product_type'],
-                $validated['selected_options']
-            );
-
-            return response()->json([
-                'price' => $price,
-                'formatted' => number_format($price, 2, ',', ' ') . ' ₽'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Ошибка расчета цены: ' . $e->getMessage()
-            ], 500);
+        $parsed = json_decode($data['project_data'], true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'Невалидный JSON'], 422);
         }
+
+        $cart = session()->get('cart', []);
+
+        $cart[] = [
+            'name'     => $data['project_name'],
+            'template' => $parsed['template'] ?? null,
+            'preview'  => $parsed['preview']  ?? null,
+            'date'     => now()->format('d.m.Y H:i'),
+        ];
+
+        session(['cart' => $cart]);
+
+        return response()->json(['success' => true]);
     }
 
-    private function calculateItemPrice($productType, $params)
+    /**
+     * Очистить корзину (сбросить сессию).
+     */
+    public function clear(Request $request)
     {
-        try {
-            $product = Product::with('options')
-                ->where('type', $productType)
-                ->firstOrFail();
+        session()->forget('cart');
+        return redirect()->route('cart')
+            ->with('success', 'Корзина очищена.');
+    }
 
-            $total = $product->base_price;
-
-            foreach ($params as $optionType => $optionValue) {
-                $option = $product->options
-                    ->where('option_type', $optionType)
-                    ->where('option_name', $optionValue)
-                    ->first();
-
-                if ($option) {
-                    $total += $option->price_modifier;
-                }
-            }
-
-            return $total;
-        } catch (\Exception $e) {
-            \Log::error("Price calculation failed for {$productType}: " . $e->getMessage());
-            throw new \Exception("Невозможно рассчитать стоимость");
+    /**
+     * Оформить заказ: перенести всё из сессии в таблицы orders и order_items.
+     */
+    public function checkout(Request $request)
+    {
+        $cart = session()->get('cart', []);
+        if (empty($cart)) {
+            return redirect()->route('cart')
+                ->withErrors('Корзина пуста.');
         }
+
+        // Создаём сам заказ
+        $order = Order::create([
+            'user_id'     => Auth::id() ?: null,
+            'status'      => 'new',
+            'total_price' => 0,  // обновим ниже
+        ]);
+
+        $totalSum = 0;
+
+        foreach ($cart as $item) {
+            $type    = $item['template']['type'] ?? null;
+            $product = Product::where('type', $type)->first();
+
+            // Базовая цена
+            $basePrice = $product->base_price ?? 0;
+
+            // Здесь можно получить дополнительные параметры из request,
+            // но в простой схеме мы их не передаем, поэтому считаем по базовой:
+            $pricePerItem = $basePrice;
+            $quantity     = 1;
+
+            $subtotal = $pricePerItem * $quantity;
+            $totalSum += $subtotal;
+
+            OrderItem::create([
+                'order_id'       => $order->id,
+                'project_name'   => $item['name'],
+                'product_type'   => $type,
+                'parameters'     => $item['template'],   // или массив опций
+                'quantity'       => $quantity,
+                'price_per_item' => $pricePerItem,
+            ]);
+        }
+
+        // Обновляем итоговую сумму заказа
+        $order->update(['total_price' => $totalSum]);
+
+        // Очищаем корзину
+        session()->forget('cart');
+
+        return redirect()->route('cart')
+            ->with('success', 'Заказ №' . $order->id . ' успешно оформлен.');
     }
 }
