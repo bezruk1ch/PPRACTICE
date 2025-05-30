@@ -14,6 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&family=Oswald:wght@200;400;600&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -86,12 +88,37 @@
             </div>
 
 
+
             <!-- Элементы -->
-            <div id="elements-options" class="toolbox-section" style="display: none;">
+            <div id="elements-options" class="toolbox-section">
                 <h3 class="section-title">Элементы</h3>
                 <div class="section-group">
-                    <button class="tool-btn">Фигуры и линии</button>
-                    <button class="tool-btn">Коллекция иконок</button>
+                    <button class="tool-btn" data-section="shapes">Фигуры и линии</button>
+                    <button class="tool-btn" data-section="icons">Коллекция иконок</button>
+                </div>
+            </div>
+
+            <!-- Контент для "Фигуры и линии" (изначально скрыт) -->
+            <div id="shapes-section" class="toolbox-section" style="display: none;">
+                <button class="back-btn">← Назад</button>
+                <h3 class="section-title">Фигуры и линии</h3>
+                <div class="shapes-grid">
+                    <button class="element-btn" data-type="shape" data-shape="rectangle">□ Прямоугольник</button>
+                    <button class="element-btn" data-type="shape" data-shape="circle">○ Круг</button>
+                    <button class="element-btn" data-type="shape" data-shape="triangle">△ Треугольник</button>
+                    <button class="element-btn" data-type="shape" data-shape="line">― Линия</button>
+                </div>
+            </div>
+
+            <!-- Контент для "Коллекция иконок" (изначально скрыт) -->
+            <div id="icons-section" class="toolbox-section" style="display: none;">
+                <button class="back-btn">← Назад</button>
+                <h3 class="section-title">Коллекция иконок</h3>
+                <div class="icons-grid">
+                    <button class="element-btn" data-type="icon" data-icon="heart">❤️ Сердце</button>
+                    <button class="element-btn" data-type="icon" data-icon="star">⭐ Звезда</button>
+                    <button class="element-btn" data-type="icon" data-icon="check">✓ Галочка</button>
+                    <button class="element-btn" data-type="icon" data-icon="bolt">⚡ Молния</button>
                 </div>
             </div>
 
@@ -143,7 +170,7 @@
                 <div class="canvas-area">
                     <!-- Кнопки над холстом -->
                     <div class="canvas-controls-top">
-                        <button id="copySideBtn" class="side-btn">Скопировать сторону</button>
+                        <button id="copySideBtn" class="side-btn" onclick='alert("Функция \"Скопировать сторону\" в разработке")'>Скопировать сторону</button>
                         <button id="clearSideBtn" class="side-btn" onclick="clearCanvas()">Очистить сторону</button>
                     </div>
 
@@ -162,7 +189,7 @@
                     <div class="canvas-controls-bottom">
                         <div class="side-switch">
                             <button id="frontSideBtn" class="side-btn active">Лицевая сторона</button>
-                            <button id="backSideBtn" class="side-btn">Оборотная сторона</button>
+                            <button id="backSideBtn" class="side-btn" onclick='alert("Функция \"Оборотная сторона\" в разработке")'>Оборотная сторона</button>
                         </div>
                         <button id="proceedBtn" class="action-btn">Продолжить</button>
                     </div>
@@ -176,8 +203,8 @@
     <!-- шаблон базовых действий -->
     <template id="tpl-actions-default">
         <div class="editor-actions">
-            <button id="undoBtn" class="action-btn">← Отменить</button>
-            <button id="redoBtn" class="action-btn">Вернуть →</button>
+            <button id="undoBtn" class="action-btn" onclick="alert('Функция Отменить еще в разработке')">← Отменить</button>
+            <button id="redoBtn" class="action-btn" onclick="alert('Функция Вернуть еще в разработке')">Вернуть →</button>
             <button id="saveBtn" class="action-btn" onclick="saveDesign()">Сохранить макет</button>
             <button id="clearBtn" class="action-btn" onclick="clearCanvas()">Очистить</button>
         </div>
@@ -264,7 +291,7 @@
         <div class="image-edit-panel" style="display:flex; gap:10px; padding:12px; background:#1e1e1e; border-radius:12px;">
             <button onclick="bringForward()">⬆️ Вперёд</button>
             <button onclick="sendBackward()">⬇️ Назад</button>
-            <label>Ширина:
+            <label>Размер:
                 <input id="imgWidthInput" type="number" min="10" onchange="onImageWidthChange()">
             </label>
             <label>Поворот:

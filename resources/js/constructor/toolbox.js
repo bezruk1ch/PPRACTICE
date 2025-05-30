@@ -20,7 +20,7 @@ export function initToolbox() {
       e.stopPropagation();
       const tool = button.dataset.tool;
       const targetSection = document.getElementById(`${tool}-options`);
-      
+
       if (!targetSection) {
         console.warn(`Секция ${tool}-options не найдена`);
         return;
@@ -52,9 +52,12 @@ export function initToolbox() {
 
   // Обработка фона
   initBackgroundSection();
-  
+
   // Обработка изображений
   initImagesSection();
+
+  // Обработка элементов 
+  initElementsSection();
 }
 
 function initBackgroundSection() {
@@ -79,7 +82,7 @@ function initBackgroundSection() {
     uploadBg.addEventListener('change', e => {
       const file = e.target.files[0];
       if (!file) return;
-      
+
       const reader = new FileReader();
       reader.onload = ev => {
         canvas.style.backgroundImage = `url(${ev.target.result})`;
@@ -102,7 +105,7 @@ function initBackgroundSection() {
         alert('Введите ссылку на изображение');
         return;
       }
-      
+
       const img = new Image();
       img.crossOrigin = 'Anonymous';
       img.onload = () => {
@@ -130,14 +133,14 @@ function initImagesSection() {
   // Загрузка с компьютера
   const uploadBtn = imgSection.querySelector('button[data-action="upload"]');
   const uploadInput = imgSection.querySelector('input.upload-input');
-  
+
   if (uploadBtn && uploadInput) {
     uploadBtn.addEventListener('click', () => uploadInput.click());
-    
+
     uploadInput.addEventListener('change', e => {
       const file = e.target.files?.[0];
       if (!file) return;
-      
+
       const reader = new FileReader();
       reader.onload = ev => {
         // Если функция вставки не определена, создаем базовую
@@ -155,7 +158,7 @@ function initImagesSection() {
   // Добавление по ссылке
   const urlBtn = imgSection.querySelector('button[data-action="by-url"]');
   const urlInput = imgSection.querySelector('input.text-input');
-  
+
   if (urlBtn && urlInput) {
     const handleImageByUrl = () => {
       const url = urlInput.value.trim();
@@ -163,7 +166,7 @@ function initImagesSection() {
         alert('Введите URL картинки');
         return;
       }
-      
+
       // Проверка URL (более гибкая)
       if (!isValidImageUrl(url)) {
         alert('URL должен указывать на изображение (jpg, png, gif, webp, svg)');
@@ -203,49 +206,49 @@ function isValidImageUrl(url) {
 
 function createDefaultImageInserter() {
   console.warn('Функция insertImageOnCanvas не определена. Используется базовая реализация.');
-  
-  return function(imageSrc) {
+
+  return function (imageSrc) {
     const canvas = document.getElementById('canvas');
     if (!canvas) {
       console.error('Холст (canvas) не найден');
       return;
     }
-    
+
     const img = document.createElement('img');
     img.src = imageSrc;
     img.classList.add('draggable');
     img.style.position = 'absolute';
     img.style.top = '50px';
     img.style.left = '50px';
-    img.style.maxWidth = '200px';
-    img.style.maxHeight = '200px';
+    img.style.maxWidth = '1000px';
+    img.style.maxHeight = '1000px';
     img.style.cursor = 'move';
-    
+
     canvas.appendChild(img);
-    
+
     // Базовая реализация перетаскивания
     let isDragging = false;
     let offsetX, offsetY;
-    
+
     img.addEventListener('mousedown', e => {
       isDragging = true;
       offsetX = e.clientX - img.getBoundingClientRect().left;
       offsetY = e.clientY - img.getBoundingClientRect().top;
       img.style.zIndex = '1000';
     });
-    
+
     document.addEventListener('mousemove', e => {
       if (!isDragging) return;
-      
+
       const canvasRect = canvas.getBoundingClientRect();
       const x = e.clientX - canvasRect.left - offsetX;
       const y = e.clientY - canvasRect.top - offsetY;
-      
+
       // Ограничение перемещения в пределах холста
       img.style.left = `${Math.max(0, Math.min(x, canvasRect.width - img.offsetWidth))}px`;
       img.style.top = `${Math.max(0, Math.min(y, canvasRect.height - img.offsetHeight))}px`;
     });
-    
+
     document.addEventListener('mouseup', () => {
       isDragging = false;
       img.style.zIndex = '1';
@@ -259,7 +262,7 @@ function createDefaultImageInserter() {
 function applyCanvasTemplate(template) {
   const canvas = document.getElementById('canvas');
   const wrapper = document.getElementById('canvas-wrapper');
-  
+
   if (!canvas || !wrapper) {
     console.error('Canvas или wrapper не найдены');
     return;
@@ -267,13 +270,13 @@ function applyCanvasTemplate(template) {
 
   // Сохраняем позицию скролла
   const prevScroll = { left: wrapper.scrollLeft, top: wrapper.scrollTop };
-  
+
   clearCanvas();
-  
+
   // Применяем размеры
   canvas.style.width = `${template.width}px`;
   canvas.style.height = `${template.height}px`;
-  
+
   // Фоновое изображение
   if (template.image) {
     canvas.style.backgroundImage = `url('${template.image}')`;
@@ -283,13 +286,13 @@ function applyCanvasTemplate(template) {
     canvas.style.backgroundImage = '';
     canvas.style.backgroundColor = '#ffffff';
   }
-  
+
   // Восстанавливаем скролл
   requestAnimationFrame(() => wrapper.scrollTo(prevScroll.left, prevScroll.top));
-  
+
   // Обновляем направляющие
   updateSafetyLines(template.width, template.height);
-  
+
   // Направляющие для буклета
   if (template.type === 'Буклет') {
     drawBookletGuides(template.width);
@@ -301,10 +304,10 @@ function applyCanvasTemplate(template) {
 function drawBookletGuides(width) {
   const canvas = document.getElementById('canvas');
   if (!canvas) return;
-  
+
   // Удаляем старые направляющие
   clearBookletGuides();
-  
+
   const third = width / 3;
   for (let i = 1; i <= 2; i++) {
     const guide = document.createElement('div');
@@ -336,7 +339,7 @@ function clearBookletGuides() {
 function clearCanvas() {
   const canvas = document.getElementById('canvas');
   if (!canvas) return;
-  
+
   // Удаляем все элементы, кроме фона и направляющих
   const elements = canvas.querySelectorAll(':not(.safety-line, .booklet-guide)');
   elements.forEach(el => el.remove());
@@ -345,7 +348,7 @@ function clearCanvas() {
 function updateSafetyLines(width, height) {
   const offset = 20;
   const lines = document.querySelectorAll('.safety-line');
-  
+
   lines.forEach(line => {
     if (line.classList.contains('top')) line.style.top = `${offset}px`;
     if (line.classList.contains('right')) line.style.right = `${offset}px`;
@@ -368,16 +371,125 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Обработчики выбора основы
   document.querySelectorAll('[data-product-type]').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
       const template = {
         type: this.dataset.productType,
         width: parseInt(this.dataset.templateWidth) || 800,
         height: parseInt(this.dataset.templateHeight) || 600,
         image: this.dataset.templateImage || ''
       };
-      
+
       applyCanvasTemplate(template);
       sessionStorage.setItem('selectedTemplate', JSON.stringify(template));
     });
   });
 });
+
+
+
+
+
+function initElementsSection() {
+  const elementsSection = document.getElementById('elements-options');
+  if (!elementsSection) return;
+
+  // Переключение между разделами
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const section = btn.dataset.section;
+      document.getElementById('elements-options').style.display = 'none';
+      document.getElementById(`${section}-section`).style.display = 'block';
+    });
+  });
+
+  // Кнопка "Назад"
+  document.querySelectorAll('.back-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.toolbox-section').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById('elements-options').style.display = 'block';
+    });
+  });
+
+  // Добавление элемента на холст
+  document.querySelectorAll('.element-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const type = btn.dataset.type;
+      const elementType = btn.dataset[type];
+
+      const element = type === 'shape'
+        ? createShape(elementType)
+        : createIcon(elementType);
+
+      addElementToCanvas(element);
+    });
+  });
+}
+
+// Улучшенная функция добавления на холст
+function addElementToCanvas(element) {
+  const canvas = document.getElementById('canvas');
+  if (!canvas) return;
+
+  // Позиционирование по центру холста
+  const canvasRect = canvas.getBoundingClientRect();
+  element.style.position = 'absolute';
+  element.style.left = `${canvasRect.width / 2 - element.offsetWidth / 2}px`;
+  element.style.top = `${canvasRect.height / 2 - element.offsetHeight / 2}px`;
+  element.style.cursor = 'move';
+
+  canvas.appendChild(element);
+  makeDraggable(element);
+}
+
+// Создание фигуры
+function createShape(shapeType) {
+  const shape = document.createElement('div');
+  shape.className = `draggable shape ${shapeType}`;
+
+  switch (shapeType) {
+    case 'rectangle':
+      shape.style.width = '100px';
+      shape.style.height = '60px';
+      shape.style.backgroundColor = '#4CAF50';
+      break;
+    case 'circle':
+      shape.style.width = '60px';
+      shape.style.height = '60px';
+      shape.style.borderRadius = '50%';
+      shape.style.backgroundColor = '#2196F3';
+      break;
+    case 'triangle':
+      shape.style.width = '0';
+      shape.style.height = '0';
+      shape.style.borderLeft = '30px solid transparent';
+      shape.style.borderRight = '30px solid transparent';
+      shape.style.borderBottom = '60px solid #FF9800';
+      break;
+    case 'line':
+      shape.style.width = '100px';
+      shape.style.height = '2px';
+      shape.style.backgroundColor = '#000';
+      break;
+  }
+
+  return shape;
+}
+
+// Создание иконки (можно заменить на Font Awesome)
+function createIcon(iconType) {
+  const icon = document.createElement('div');
+  icon.className = 'draggable icon';
+  icon.textContent = {
+    'heart': '❤️',
+    'star': '⭐',
+    'check': '✓',
+    'bolt': '⚡'
+  }[iconType];
+  icon.style.fontSize = '40px';
+  return icon;
+}
