@@ -20,7 +20,6 @@ export default defineConfig({
                 'resources/css/cart.css',
                 'resources/js/cart.js',
                 'resources/css/admin.css',
-                'resources/css/admin-admin.css',
                 
                 //КОНСТРУКТОР ЗАКАЗОВ
                 'resources/js/constructor/index.js',
