@@ -19,6 +19,8 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductOption;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderCreatedMail;
 
 class CartController extends Controller
 {
@@ -79,53 +81,96 @@ class CartController extends Controller
      */
     public function checkout(Request $request)
     {
+        /* ───────────────────── 1. ВАЛИДАЦИЯ ───────────────────── */
+        $data = $request->validate([
+            // выбор способа получения
+            'shipping_type'    => 'required|in:delivery,pickup',
+            // адрес нужен только при delivery
+            'shipping_address' => 'required_if:shipping_type,delivery|string|max:255',
+            // оплата
+            'payment_method'   => 'required|in:cash,card,online',
+            // комментарий не обязателен
+            'comment'          => 'nullable|string|max:500',
+
+            // массив позиций из формы
+            'items'                => 'required|array',
+            'items.*.quantity'     => 'required|integer|min:1',
+            'items.*.options'      => 'array',
+            'items.*.options.*'    => 'string|max:100',
+
+        ]);
+
+        /* ───────────────────── 2. ПРОВЕРКА КОРЗИНЫ ───────────────────── */
         $cart = session()->get('cart', []);
         if (empty($cart)) {
             return redirect()->route('cart')
-                ->withErrors('Корзина пуста.');
+                ->with('order_error', 'Корзина пуста.');
         }
 
-        // Создаём сам заказ
-        $order = Order::create([
-            'user_id'     => Auth::id() ?: null,
-            'status'      => 'new',
-            'total_price' => 0,  // обновим ниже
-        ]);
+        $itemsData = $data['items'];   // всё то же, только берём из $data
+        $user = Auth::user();
 
-        $totalSum = 0;
-
-        foreach ($cart as $item) {
-            $type    = $item['template']['type'] ?? null;
-            $product = Product::where('type', $type)->first();
-
-            // Базовая цена
-            $basePrice = $product->base_price ?? 0;
-
-            // Здесь можно получить дополнительные параметры из request,
-            // но в простой схеме мы их не передаем, поэтому считаем по базовой:
-            $pricePerItem = $basePrice;
-            $quantity     = 1;
-
-            $subtotal = $pricePerItem * $quantity;
-            $totalSum += $subtotal;
-
-            OrderItem::create([
-                'order_id'       => $order->id,
-                'project_name'   => $item['name'],
-                'product_type'   => $type,
-                'parameters'     => $item['template'],   // или массив опций
-                'quantity'       => $quantity,
-                'price_per_item' => $pricePerItem,
+        try {
+            /* ───────────────── 3. СОЗДАНИЕ ЗАКАЗА ───────────────── */
+            $order = Order::create([
+                'user_id'          => Auth::id() ?: null,
+                'status'           => 'new',
+                'total_price'      => 0,                   // обновим ниже
+                'shipping_type'    => $data['shipping_type'],
+                'shipping_address' => $data['shipping_address'] ?? null,
+                'payment_method'   => $data['payment_method'],
+                'comment'          => $data['comment']     ?? null,
+                'customer_name'    => $user->name,
+                'customer_email'   => $user->email,
+                'customer_phone'   => $user->phone ?? '',
             ]);
+
+            $totalSum = 0;
+
+            /* ──────────────── 4. ПЕРЕНОС ПОЗИЦИЙ ──────────────── */
+            foreach ($cart as $index => $item) {
+                $type    = $item['template']['type'] ?? null;
+                $product = Product::where('type', $type)->with('options')->first();
+                if (!$product) continue;
+
+                $basePrice = $product->base_price ?? 0;
+                $quantity  = (int)($itemsData[$index]['quantity'] ?? 1);
+                $options   = $itemsData[$index]['options'] ?? [];
+
+                // модификаторы наценки
+                $modifiers = 0;
+                foreach ($options as $optType => $optValue) {
+                    $opt = $product->options
+                        ->where('option_type', $optType)
+                        ->where('option_name', $optValue)
+                        ->first();
+                    $modifiers += $opt?->price_modifier ?? 0;
+                }
+
+                $pricePerItem = $basePrice + $modifiers;
+                $subtotal     = $pricePerItem * $quantity;
+                $totalSum    += $subtotal;
+
+                OrderItem::create([
+                    'order_id'       => $order->id,
+                    'project_name'   => $item['name'],
+                    'product_type'   => $type,
+                    'parameters'     => json_encode($options, JSON_UNESCAPED_UNICODE),
+                    'quantity'       => $quantity,
+                    'price_per_item' => $pricePerItem,
+                ]);
+            }
+
+            /* ─────────────────── 5. ИТОГО ─────────────────── */
+            $order->update(['total_price' => $totalSum]);
+
+            session()->forget('cart');
+
+            return redirect()->route('cart')
+                ->with('order_success', "Заказ успешно оформлен 🎉 Уведомление отправлено на {$order->customer_email}");
+        } catch (\Throwable $e) {
+            report($e);
+            return redirect()->route('cart')->with('order_error', 'Произошла ошибка при оформлении заказа. Попробуйте снова.');
         }
-
-        // Обновляем итоговую сумму заказа
-        $order->update(['total_price' => $totalSum]);
-
-        // Очищаем корзину
-        session()->forget('cart');
-
-        return redirect()->route('cart')
-            ->with('success', 'Заказ №' . $order->id . ' успешно оформлен.');
     }
 }

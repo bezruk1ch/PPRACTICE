@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderReadyMail; 
+
 
 class OrderController extends Controller
 {
@@ -29,11 +32,19 @@ class OrderController extends Controller
     // 3) Обновление статуса
     public function updateStatus(Request $request, Order $order)
     {
+        /* ── валидация ── */
         $data = $request->validate([
-            'status' => 'required|in:new,processing,shipped,completed,canceled',
+            'status' => 'required|in:new,processing,ready,shipped,completed,canceled',
         ]);
 
+        $previousStatus = $order->status;          // запомним старый
         $order->update(['status' => $data['status']]);
+
+        /* ── письмо клиенту, когда заказ готов ── */
+        if ($data['status'] === 'ready' && $previousStatus !== 'ready') {
+            Mail::to($order->customer_email)
+                ->send(new OrderReadyMail($order));
+        }
 
         return redirect()
             ->route('admin.orders.show', $order)

@@ -14,6 +14,9 @@ FROM bitnami/laravel AS base
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    netcat-openbsd \
+    && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y unzip git && rm -rf /var/lib/apt/lists/*
 
 COPY . /app
@@ -24,9 +27,16 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN bash ./scripts/init_env.sh
 
-ENTRYPOINT ["sh", "-c", "php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan event:cache \
-    && php artisan optimize \
-    && php artisan migrate \
-    && php artisan serve --host=0.0.0.0 --port=${APP_PORT:-9000}"]
+COPY wait-for-db.sh /usr/local/bin/wait-for-db.sh
+RUN chmod +x /usr/local/bin/wait-for-db.sh
+ENTRYPOINT ["sh", "-c", "\
+    echo 'Waiting for MySQL at $DB_HOST:$DB_PORT…'; \
+    wait-for-db.sh $DB_HOST $DB_PORT; \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan event:cache && \
+    php artisan optimize && \
+    php artisan migrate --force && \
+    php artisan db:seed --force &&\
+    php artisan serve --host=0.0.0.0 --port=${APP_PORT:-9000} \
+"]

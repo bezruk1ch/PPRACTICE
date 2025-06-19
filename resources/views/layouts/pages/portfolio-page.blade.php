@@ -22,41 +22,49 @@
 </head>
 
 <body class="m-0 bg-[#2C3E50] font-montserrat">
-    @include('page-elements.header')
+    <div class="page-wrapper">
 
-    <section class="portfolio-section">
-        <div class="container-portfolio">
-            <!-- Заголовок -->
-            <h2 class="portfolio-title">Примеры наших работ</h2>
+        @include('page-elements.header')
 
-            <!-- Описание -->
-            <p class="portfolio-description">
-                Посмотрите примеры наших работ и вдохновитесь<br>идеями для своего проекта!
-            </p>
+        <div class="page-content">
 
-            <!-- Секция с работами -->
-            <div class="portfolio-items">
-                @foreach ($portfolios as $portfolio)
-                <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">
-                        <img src="{{ asset($portfolio->image) }}" alt="{{ $portfolio->title }}" class="portfolio-image">
-                        <button class="portfolio-more-btn" onclick="openModal({{ $portfolio->id }})">Подробнее</button>
+            <section class="portfolio-section">
+                <div class="container-portfolio">
+                    <!-- Заголовок -->
+                    <h2 class="portfolio-title">Примеры наших работ</h2>
+
+                    <!-- Описание -->
+                    <p class="portfolio-description">
+                        Посмотрите примеры наших работ и вдохновитесь<br>идеями для своего проекта!
+                    </p>
+
+                    <!-- Секция с работами -->
+                    <div class="portfolio-items">
+                        @foreach ($portfolios as $portfolio)
+                        <div class="portfolio-item">
+                            <div class="portfolio-image-wrapper">
+                                <img src="{{ asset($portfolio->image) }}" alt="{{ $portfolio->title }}" class="portfolio-image">
+                                <button class="portfolio-more-btn" onclick="openModal({{ $portfolio->id }})">Подробнее</button>
+                            </div>
+                            <p class="portfolio-text">{!! nl2br(e($portfolio->title)) !!}</p>
+                        </div>
+
+                        @endforeach
                     </div>
-                    <p class="portfolio-text">{!! nl2br(e($portfolio->title)) !!}</p>
+
+                    <!-- Кнопки для прокрутки -->
+                    <div class="reviews-navigation">
+                        <button class="prev-btn" onclick="scrollReviews(-1)">Назад</button>
+                        <button class="next-btn" onclick="scrollReviews(1)">Вперед</button>
+                    </div>
                 </div>
+            </section>
 
-                @endforeach
-            </div>
-
-            <!-- Кнопки для прокрутки -->
-            <div class="reviews-navigation">
-                <button class="prev-btn" onclick="scrollReviews(-1)">Назад</button>
-                <button class="next-btn" onclick="scrollReviews(1)">Вперед</button>
-            </div>
         </div>
-    </section>
 
-    @include('page-elements.footer')
+        @include('page-elements.footer')
+
+    </div>
 
     @foreach ($portfolios as $portfolio)
     <div id="modal-{{ $portfolio->id }}" class="portfolio-modal hidden">

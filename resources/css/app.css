@@ -10,3 +10,26 @@
     justify-content: space-between;
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* на всю высоту окна */
+}
+
+.page-content {
+    flex: 1 0 auto;
+    /* занимает всё доступное пространство */
+}
+
+/* Убедись, что футер не сжимается */
+footer {
+    flex-shrink: 0;
+}

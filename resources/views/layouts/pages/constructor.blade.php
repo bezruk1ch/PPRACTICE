@@ -62,18 +62,27 @@
                 <a href="#" onclick="addText('paragraph')">Обычный текст</a>
             </div>
 
-            <!-- Фон -->
-            <div id="background-options" class="toolbox-section" style="display: none;">
+            <!-- === Ф О Н ========================== -->
+            <div id="background-options" class="toolbox-section" style="display:none;">
                 <h3 class="section-title">Фон</h3>
+
                 <div class="section-group">
+                   
+
                     <button class="tool-btn">Заливка цветом</button>
                     <input type="color" class="color-picker" value="#ffffff">
+
                     <button class="tool-btn">Загрузить с компьютера</button>
                     <input type="file" accept="image/*" class="upload-input">
+
                     <button id="addBgByUrlBtn" class="tool-btn">Добавить по ссылке</button>
-                    <input type="text" id="bgUrlInput" placeholder="https://example.com/image.jpg" class="text-input" style="margin-top: 5px; width: 100%;">
+                    <input type="text" id="bgUrlInput"
+                        placeholder="https://example.com/image.jpg"
+                        class="text-input" style="margin-top:5px;width:100%;">
                 </div>
             </div>
+
+            
 
             <!-- Картинки -->
             <div id="images-options" class="toolbox-section" style="display: none;">
@@ -126,6 +135,11 @@
             <div id="base-options" class="toolbox-section" style="display: none;">
                 <h3 class="section-title">Основа</h3>
                 <div class="section-group">
+                    @php
+                    // helper‑функция
+                    function slug($str){ return Str::slug($str, '-'); }
+                    @endphp
+
                     @foreach($products as $product)
                     <button class="tool-btn"
                         data-product-type="{{ $product->type }}"

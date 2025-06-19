@@ -80,6 +80,7 @@ Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.c
 // Сброс корзины
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
+Route::post('/order', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
 
 // Тест страница
 Route::get('/test', [TestController::class, 'index'])->name('test');

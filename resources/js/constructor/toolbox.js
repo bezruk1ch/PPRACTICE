@@ -61,6 +61,7 @@ export function initToolbox() {
 }
 
 function initBackgroundSection() {
+
   const bgSection = document.getElementById('background-options');
   if (!bgSection) return;
 

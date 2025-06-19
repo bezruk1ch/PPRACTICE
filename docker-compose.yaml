@@ -1,4 +1,4 @@
-name: laravel
+version: '3.3'
 
 services:
   laravel:
@@ -9,30 +9,32 @@ services:
     environment:
       APP_PORT: ${APP_PORT:-9000}
       DB_CONNECTION: mysql
-      DB_HOST: db
+      DB_HOST: db3
       DB_PORT: ${DB_PORT:-3306}
       DB_DATABASE: ${DB_DATABASE:-laravel_db}
       DB_USERNAME: ${DB_USERNAME:-root}
       DB_PASSWORD: ${DB_PASSWORD:-123123}
     depends_on:
-      db:
-        condition: service_healthy
-  db:
+      - db3
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${APP_PORT:-9000}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      
+  db3:
+    image: mysql:latest
     ports:
       - "${DB_PORT:-3306}:${DB_PORT:-3306}"
-    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD:-123123}"
-      MYSQL_HOST: "%"
       MYSQL_DATABASE: "${DB_DATABASE:-laravel_db}"
-      MYSQL_TCP_PORT: "${DB_PORT:-3306}"
+    tmpfs:
+      - /var/lib/mysql  
     healthcheck:
-      test:
-        [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${ROOT_PASSWORD:-123123}",
-        ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_PASSWORD:-123123}"]
+      interval: 5s
       timeout: 20s
-      retries: 5
-    volumes:
-      - ./db_data:/var/lib/mysql
-
-volumes: {}
+      retries: 10
+    restart: unless-stopped

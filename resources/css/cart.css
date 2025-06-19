@@ -15,24 +15,21 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     font-size: 48px;
-    text-align: center;
-    margin: 0 0 30px;
     color: #FFFFFF;
-}
-
-/* Список элементов */
-.cart-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    line-height: 1.2;
+    text-align: center;
+    margin: 0 auto 30px;
+    display: block;
+    width: 100%;
 }
 
 /* Одна позиция */
 .cart-item {
-    background-color: #1E2730;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    /* было: gap … */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 1170px;
+    box-sizing: border-box;
 }
 
 .cart-item p {
@@ -132,7 +129,6 @@
 }
 
 .cart-item {
-    display: flex;
     gap: 20px;
     background-color: #1E2730;
     padding: 20px;
@@ -148,10 +144,9 @@
 
 /* Левая: фиксированная ширина */
 .col-left {
-    width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex: 0 0 320px;
+    max-width: 320px;
+    box-sizing: border-box;
 }
 
 .col-left p {
@@ -162,35 +157,43 @@
 
 /* Средняя: гибкая, занимает всё доступное */
 .col-middle {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    /* важно для переполнения */
+    box-sizing: border-box;
 }
 
 /* Правая: фиксированная ширина */
 .col-right {
-    width: 160px;
-    background-color: #212A33;
-    padding: 16px;
+    order: 99;
+    width: 100%;
+    margin-top: 20px;
+    background: #212A33;
+    padding: 16px 30px;
     border-radius: 8px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    /* центрирование всей строки */
+    gap: 40px;
+    /* расстояние между двумя текстами */
+    box-sizing: border-box;
 }
 
 .col-right p {
-    margin: 12px 0;
+    margin: 0;
     font-family: 'Montserrat', sans-serif;
-    font-size: 18px;
+    font-size: 20px;
     color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .col-right .price-per-item,
 .col-right .total-price {
-    display: block;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
     color: #00D084;
-    margin-top: 4px;
 }
 
 /* Стили инпутов и селектов */
@@ -226,94 +229,526 @@
     border-radius: 8px;
 }
 
-@media (max-width: 1280px) {
-    .cart-section {
-        width: 95%;
-        padding: 30px;
+
+
+.flash {
+    margin: 18px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: Lato, sans-serif;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.flash-success {
+    background: #1e4620;
+    color: #d4f4d7;
+}
+
+.flash-error {
+    background: #4b1e1e;
+    color: #ffd9d9;
+}
+
+/* Блок оформления (доставка, оплата, комментарий) */
+.checkout-extra {
+    flex: 0 0 360px;
+    max-width: 360px;
+    box-sizing: border-box;
+}
+
+/* Элементы внутри блока оформления */
+.checkout-extra h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #FFFFFF;
+}
+
+/* Радиокнопки */
+.checkout-extra label.inline-flex {
+    font-size: 16px;
+    color: #E0E6ED;
+    align-items: center;
+}
+
+/* Текстовое поле и textarea */
+.checkout-extra label,
+.checkout-extra select,
+.checkout-extra textarea,
+.checkout-extra input[type="text"] {
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #E0E6ED;
+    font-family: 'Lato', sans-serif;
+}
+
+.checkout-extra input[type="radio"] {
+    margin-right: 6px;
+}
+
+.checkout-extra input[type="text"],
+.checkout-extra textarea,
+.checkout-extra select {
+    padding: 8px 10px;
+    background-color: #2C3E50;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #E0E6ED;
+}
+
+.checkout-extra textarea {
+    resize: vertical;
+}
+
+.checkout-extra .inline-flex {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 12px;
+}
+
+
+.checkout-extra .mt-1 {
+    margin-top: 6px;
+}
+
+.checkout-extra .mt-3 {
+    margin-top: 12px;
+}
+
+.checkout-extra .mt-4 {
+    margin-top: 16px;
+}
+
+.checkout-extra .mb-2 {
+    margin-bottom: 8px;
+}
+
+
+
+/* Мелкие отступы для полей */
+.checkout-extra label.block {
+    display: block;
+    margin-top: 10px;
+}
+
+
+
+/* Внутренний контейнер карточки */
+.cart-main {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.checkout-extra input[disabled] {
+    background-color: #3B4550;
+    /* чуть темнее, чтобы было видно, что поле недоступно */
+    cursor: not-allowed;
+    opacity: .65;
+}
+
+/* ===== ≥ 1200px – десктоп ===== */
+@media (min-width: 1200px) {
+    .cart-item {
+        width: 1170px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .cart-title {
-        font-size: 40px;
+    .col-left {
+        flex: 0 0 320px;
+        max-width: 320px;
+    }
+
+    .checkout-extra {
+        flex: 0 0 360px;
+        max-width: 360px;
+    }
+
+    .cart-main {
+        flex-direction: row;
+    }
+
+    .col-right {
+        flex-direction: row;
+        gap: 40px;
     }
 }
 
-@media (max-width: 992px) {
+/* ===== 992–1199px – малая десктопная / landscape‑планшет ===== */
+@media (min-width: 992px) and (max-width: 1199px) {
     .cart-item {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .col-left {
+        flex: 0 0 260px;
+        max-width: 260px;
+    }
+
+    .checkout-extra {
+        flex: 0 0 320px;
+        max-width: 320px;
+    }
+
+    .cart-main {
+        flex-direction: row;
+    }
+
+    .col-right {
+        flex-direction: row;
+        gap: 32px;
+    }
+}
+
+/* ===== 768–991px – планшеты ===== */
+@media (min-width: 768px) and (max-width: 991px) {
+    .cart-item {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .col-left {
+        flex: 0 0 220px;
+        max-width: 220px;
+    }
+
+    .checkout-extra {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* уходит на новую строку */
+    .cart-main {
+        flex-wrap: wrap;
+    }
+
+    .col-right {
         flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* ===== < 768px – мобильные ===== */
+@media (max-width: 767px) {
+    .cart-section {
+        width: 100%;
+        padding: 20px;
+        border-radius: 0;
+    }
+
+    .cart-title {
+        font-size: 32px;
+    }
+
+    .cart-item {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 16px;
+    }
+
+    .cart-main {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
     }
 
     .col-left,
     .col-middle,
+    .checkout-extra,
     .col-right {
-        width: 100%;
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 
-    .col-right {
-        margin-top: 20px;
-    }
-
-    .cart-title {
-        font-size: 36px;
-    }
-
-    .cart-item p,
-    .col-right p {
-        font-size: 18px;
-    }
-
-    .param-label select,
-    .param-label input[type="number"] {
-        font-size: 15px;
-    }
-
-    .btn-back,
-    .btn-submit,
-    .btn-clear {
-        font-size: 15px;
-        padding: 10px 20px;
-    }
-
-    .cart-footer {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-
-@media (max-width: 576px) {
-    .cart-title {
-        font-size: 28px;
-    }
-
-    .cart-section {
-        padding: 20px;
-    }
-
-    .cart-item {
-        padding: 15px;
-    }
-
-    .param-label {
-        font-size: 15px;
-    }
-
-    .cart-item p,
-    .col-right p {
-        font-size: 16px;
-    }
-
-    .param-label select,
-    .param-label input[type="number"] {
-        font-size: 14px;
-    }
-
-    .btn-back,
-    .btn-submit,
-    .btn-clear {
-        font-size: 14px;
-        padding: 8px 16px;
+    .col-left {
+        text-align: center;
     }
 
     .cart-preview {
         max-width: 100%;
+        height: auto;
+    }
+
+    .col-right {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .col-right p {
+        font-size: 18px;
+
+        align-items: center;
+        text-align: center;
+    }
+
+    .cart-footer {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px 0;
+    }
+
+    .btn-back,
+    .btn-submit,
+    .btn-clear {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .checkout-extra h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .checkout-extra label,
+    .checkout-extra select,
+    .checkout-extra textarea,
+    .checkout-extra input[type="text"] {
+        font-size: 14px;
+    }
+
+    .flash {
+        margin: 12px 0;
+        font-size: 14px;
+    }
+}
+
+
+.order-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+.order-modal.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.order-modal-content {
+    background: #222;
+    /* можно под темный фон сайта */
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 320px;
+    max-width: 90%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    color: #eee;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.order-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.order-modal-close:hover {
+    color: #fff;
+}
+
+.order-modal h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 22px;
+    text-align: center;
+}
+
+.order-modal input[type="text"],
+.order-modal input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    color: #eee;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline-offset: 2px;
+    outline-color: #888;
+    transition: outline-color 0.2s ease;
+}
+
+.order-modal input[type="text"]:focus,
+.order-modal input[type="email"]:focus {
+    outline-color: #5a9df9;
+    background: #2a2a2a;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #5a9df9;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #3b7ddd;
+}
+
+/* ═════════ MODALS (shipping / contact) ═════════ */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    /* затемнённый фон */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow-y: auto;
+    /* если контент высокий */
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #1E2730;
+    color: #E0E6ED;
+    padding: 28px 32px;
+    border-radius: 12px;
+    width: 92%;
+    max-width: 420px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .6);
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    animation: modalFade .3s ease-out;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* крестик */
+.modal-content .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #888;
+    cursor: pointer;
+    transition: color .2s;
+}
+
+.modal-content .close:hover {
+    color: #fff;
+}
+
+/* заголовок */
+.modal-content h2 {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    color: #fff;
+}
+
+/* поля */
+.modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content textarea,
+.modal-content select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background: #2C3E50;
+    color: #E0E6ED;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+    outline: 2px solid #5a9df9;
+}
+
+/* радиокнопки доставки */
+.modal-content label {
+    align-items: center;
+    gap: 6px;
+    margin-right: 14px;
+    font-size: 15px;
+}
+
+/* кнопки */
+.modal-content button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #5a9df9;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background .25s;
+}
+
+.modal-content button:hover {
+    background: #3b7ddd;
+}
+
+/* адаптив */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 22px 24px;
+        font-size: 14px;
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
     }
 }
